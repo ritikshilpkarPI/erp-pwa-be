@@ -45,7 +45,7 @@
     "eject": "react-scripts eject",
     "start": "node app.js",
     "local-dev": "nodemon app.js",
-    "dev": "nodemon --exec npm run restart",
+    "dev": "node app.js",
     "restart": "rimraf dist && npm run start",
     "build": "node app.js"
   },
