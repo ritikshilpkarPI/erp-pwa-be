@@ -8,7 +8,7 @@ const signup = async (req, res) => {
     try {
         const employeeExists = await Employee.findOne({ email });
         if (employeeExists) {
-            return res.status(400).json({ message: 'Employee already exists' });
+            return res.status(400).json({ error: { message: 'Employee already exists' }});
         }
         
         const salt = await bcrypt.genSalt(10);
@@ -17,7 +17,7 @@ const signup = async (req, res) => {
         const newEmployee = new Employee({ name, email, password: hashedPassword });
         await newEmployee.save();
 
-        const token = jwt.sign({ employeeId: newEmployee._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ employeeId: newEmployee._id }, process.env.JWT_SECRET || 'JWA_SECRET', { expiresIn: '1h' });
 
         res.status(201).json({ token });
     } catch (error) {
@@ -39,7 +39,7 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ employeeId: employee._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ employeeId: employee._id }, process.env.JWT_SECRET || 'JWA_SECRET', { expiresIn: '1h' });
 
         res.status(200).json({ token });
     } catch (error) {
@@ -55,7 +55,7 @@ const verifyToken = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'JWA_SECRET');
         req.employee = decoded.employeeId;
         next();
     } catch (error) {
