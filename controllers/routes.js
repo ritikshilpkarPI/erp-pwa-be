@@ -63,7 +63,7 @@ router.put('/payments/:id', paymentController.updatePaymentById);
 router.delete('/payments/:id', paymentController.deletePaymentById);
 
 router.post('/signup', userController.signup);
-router.post('/login', userController.login);
+router.post('/signin', userController.login);
 
 
 module.exports = router
