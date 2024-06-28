@@ -30,7 +30,13 @@ const getItemById = async (req, res) => {
 // Get all items
 const getAllItems = async (req, res) => {
     try {
-        const items = await Item.find();
+        let items;
+
+        if (req.body.category_id) {
+            items = await Item.find({ category_id: req.body.category_id });
+        } else {
+            items = await Item.find();
+        }
         res.json(items);
     } catch (error) {
         res.status(500).json({ message: error.message });
