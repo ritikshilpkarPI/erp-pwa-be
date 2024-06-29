@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const SaleSchema = new Schema({
     customer_id: { type: Schema.Types.ObjectId, ref: 'Customer' },
-    item_id: { type: Schema.Types.ObjectId, ref: 'Item' },
+    items_id: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
     employee_id: { type: Schema.Types.ObjectId, ref: 'Employee' },
     date_of_sale: { type: Date },
     payment_id: { type: Schema.Types.ObjectId, ref: 'Payment' },
