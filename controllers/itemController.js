@@ -30,13 +30,20 @@ const getItemById = async (req, res) => {
 // Get all items
 const getAllItems = async (req, res) => {
     try {
-        let items;
+        const { category_id, search_query } = req.query;
 
-        if (req.body.category_id) {
-            items = await Item.find({ category_id: req.body.category_id });
-        } else {
-            items = await Item.find();
+        const query = {};
+
+        if (category_id) {
+            query.category_id = category_id;
+
         }
+        if (search_query) {
+            query.name = { $regex: search_query, $options: 'i' };
+
+        }
+        console.log(query)
+        const items = await Item.find(query);
         res.json(items);
     } catch (error) {
         res.status(500).json({ message: error.message });
