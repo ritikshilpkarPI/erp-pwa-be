@@ -33,6 +33,7 @@ router.get('/items/:id', itemController.getItemById);
 router.post('/items', itemController.getAllItems);
 router.put('/items/:id', itemController.updateItemById);
 router.delete('/items/:id', itemController.deleteItemById);
+router.get('/items', itemController.getAllItems);
 
 // // Employee routes
 router.post('/employees', employeeController.createEmployee);
