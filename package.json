@@ -46,8 +46,9 @@
     "eject": "react-scripts eject",
     "start": "node server.js",
     "local-dev": "nodemon server.js",
-    "dev": "nodemon --exec npm run restart",
-    "restart": "rimraf dist && npm run start"
+    "dev": "node app.js",
+    "restart": "rimraf dist && npm run start",
+    "build": "node server.js"
   },
   "eslintConfig": {
     "extends": [
