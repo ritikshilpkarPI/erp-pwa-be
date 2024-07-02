@@ -43,11 +43,11 @@
   "scripts": {
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start": "node app.js",
-    "local-dev": "nodemon app.js",
-    "dev": "node app.js",
+    "start": "node server.js",
+    "local-dev": "nodemon server.js",
+    "dev": "node server.js",
     "restart": "rimraf dist && npm run start",
-    "build": "node app.js"
+    "build": "node server.js"
   },
   "eslintConfig": {
     "extends": [
