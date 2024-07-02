@@ -47,7 +47,7 @@
     "local-dev": "nodemon server.js",
     "dev": "nodemon --exec npm run restart",
     "restart": "rimraf dist && npm run start",
-    "build":"npm run build"
+    "build":"react-scripts build"
   },
   "eslintConfig": {
     "extends": [
