@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "main": "server.js",
-  "build":"server.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -46,9 +45,8 @@
     "eject": "react-scripts eject",
     "start": "node server.js",
     "local-dev": "nodemon server.js",
-    "dev": "node app.js",
-    "restart": "rimraf dist && npm run start",
-    "build": "npm run build"
+    "dev": "nodemon --exec npm run restart",
+    "restart": "rimraf dist && npm run start"
   },
   "eslintConfig": {
     "extends": [
