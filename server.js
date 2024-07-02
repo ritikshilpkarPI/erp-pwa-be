@@ -22,6 +22,7 @@ app.use("*", (req, res, next) => {
     console.log({body: req.body});
     next()
 })
+
 // Customer routes
 app.use("/api/v1", router)
 
