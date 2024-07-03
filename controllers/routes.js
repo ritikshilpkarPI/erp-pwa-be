@@ -27,6 +27,7 @@ router.get('/categories', categoryController.getAllCategories);
 router.put('/categories/:id', categoryController.updateCategoryById);
 router.delete('/categories/:id', categoryController.deleteCategoryById);
 
+
 // // Item routes
 router.post('/item/additem', itemController.createItem);
 router.get('/items/:id', itemController.getItemById);
