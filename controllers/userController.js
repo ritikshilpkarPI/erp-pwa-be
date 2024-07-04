@@ -1,7 +1,7 @@
 const Employee = require('../dbModels/employe.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {generateOTP, sendOTP } = require('../util/sendOtp.js')
+const { generateOTP, sendOTP } = require('../util/sendOtp.js')
 
 // Sign Up
 const signup = async (req, res) => {
@@ -9,9 +9,9 @@ const signup = async (req, res) => {
     try {
         const employeeExists = await Employee.findOne({ email });
         if (employeeExists) {
-            return res.status(400).json({ error: { message: 'Employee already exists' }});
+            return res.status(400).json({ error: { message: 'Employee already exists' } });
         }
-        
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -32,7 +32,7 @@ const login = async (req, res) => {
     try {
         const employee = await Employee.findOne({ email });
         if (!employee) {
-            return res.status(400).json({error: { message: 'Invalid email or password' }});
+            return res.status(400).json({ error: { message: 'Invalid email or password' } });
         }
 
         const isMatch = await bcrypt.compare(password, employee.password);
@@ -41,7 +41,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ name: employee.name, email: employee.email }, process.env.JWT_SECRET || 'JWA_SECRET', { expiresIn: '1h' });
-        
+
         res.cookie('token', token, { httpOnly: false, secure: false, sameSite: 'none' });
 
         res.status(200).json({ token });
@@ -67,27 +67,26 @@ const verifyToken = (req, res, next) => {
 };
 
 const generateAndSendOTP = async (req, res) => {
-    const { input } = req.body; 
-    console.log({input});
+    const { input } = req.body;
+
     try {
         const employee = await Employee.findOne({ email: input });
         if (!employee) {
             console.log("email not found")
             return res.status(400).json({ message: 'Employee not found' });
-          
+
         }
 
         const otp = generateOTP();
         employee.otp = otp;
-        employee.otpExpires = Date.now() +  120000; 
+        employee.otpExpires = Date.now() + 120000;
         await employee.save();
 
         await sendOTP(employee.email, otp);
-        console.log({otp});
 
         res.status(200).json({ message: 'OTP sent' });
     } catch (error) {
-        console.log({error});
+        console.log({ error });
         res.status(500).json({ message: error.message });
     }
 };
