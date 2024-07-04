@@ -31,24 +31,31 @@ const getItemById = async (req, res) => {
 const getAllItems = async (req, res) => {
     try {
         const { category_id, search_query } = req.query;
-
         const query = {};
 
         if (category_id) {
             query.category_id = category_id;
-
         }
         if (search_query) {
             query.name = { $regex: search_query, $options: 'i' };
-
         }
-        console.log(query)
+
         const items = await Item.find(query);
+        console.log(items);
+
+        if (items.length === 0) {
+            return res.status(404).json({ message: 'No items found' });
+            
+        }
+
         res.json(items);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
+
 
 // Update item by ID
 const updateItemById = async (req, res) => {
@@ -87,8 +94,8 @@ const deleteItemById = async (req, res) => {
 
 module.exports = {
     createItem,
-getItemById,
-getAllItems,
-updateItemById,
-deleteItemById,
+    getItemById,
+    getAllItems,
+    updateItemById,
+    deleteItemById,
 }

@@ -13,7 +13,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: "https://erp-pwa.netlify.app/",
+    origin: ["https://erp-pwa.netlify.app/", 'http://localhost:3000', 'http://192.168.1.19:3000']
 }))
 // Middleware to parse JSON
 app.use(bodyparser.json());

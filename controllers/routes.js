@@ -65,6 +65,10 @@ router.delete('/payments/:id', paymentController.deletePaymentById);
 
 router.post('/signup', userController.signup);
 router.post('/signin', userController.login);
+router.post('/generate-otp', userController.generateAndSendOTP);
+router.post('/verify-otp', userController.verifyOTP);
+router.post('/change-password', userController.changePassword);
+
 
 
 module.exports = router

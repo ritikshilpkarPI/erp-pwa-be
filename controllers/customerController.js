@@ -99,9 +99,9 @@ const changeCreditLimitByCustomerId = async (req, res) => {
 
 module.exports = {
     createCustomer,
-getCustomerById,
-getAllCustomers,
-updateCustomerById,
-softDeleteCustomerById,
-changeCreditLimitByCustomerId
+    getCustomerById,
+    getAllCustomers,
+    updateCustomerById,
+    softDeleteCustomerById,
+    changeCreditLimitByCustomerId
 }
