@@ -2,9 +2,9 @@ const Item = require('../dbModels/item.model');
 
 // Create a new item
 const createItem = async (req, res) => {
-    const { name, category_id, sold_by, price_per_unit, price_per_dozen, price_per_carton } = req.body;
+    const { name, prize, category_id, sold_by, img_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode } = req.body;
     try {
-        const newItem = new Item({ name, category_id, sold_by, price_per_unit, price_per_dozen, price_per_carton });
+        const newItem = new Item({ name, prize, category_id, sold_by, img_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
         await newItem.save();
         res.status(201).json(newItem);
     } catch (error) {
@@ -30,13 +30,20 @@ const getItemById = async (req, res) => {
 // Get all items
 const getAllItems = async (req, res) => {
     try {
-        let items;
+        const { category_id, search_query } = req.query;
 
-        if (req.body.category_id) {
-            items = await Item.find({ category_id: req.body.category_id });
-        } else {
-            items = await Item.find();
+        const query = {};
+
+        if (category_id) {
+            query.category_id = category_id;
+
         }
+        if (search_query) {
+            query.name = { $regex: search_query, $options: 'i' };
+
+        }
+        console.log(query)
+        const items = await Item.find(query);
         res.json(items);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -80,8 +87,8 @@ const deleteItemById = async (req, res) => {
 
 module.exports = {
     createItem,
-getItemById,
-getAllItems,
-updateItemById,
-deleteItemById,
+    getItemById,
+    getAllItems,
+    updateItemById,
+    deleteItemById,
 }

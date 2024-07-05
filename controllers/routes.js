@@ -27,12 +27,14 @@ router.get('/categories', categoryController.getAllCategories);
 router.put('/categories/:id', categoryController.updateCategoryById);
 router.delete('/categories/:id', categoryController.deleteCategoryById);
 
+
 // // Item routes
-// router.post('/items', itemController.createItem);
+router.post('/item/additem', itemController.createItem);
 router.get('/items/:id', itemController.getItemById);
 router.post('/items', itemController.getAllItems);
 router.put('/items/:id', itemController.updateItemById);
 router.delete('/items/:id', itemController.deleteItemById);
+router.get('/items', itemController.getAllItems);
 
 // // Employee routes
 router.post('/employees', employeeController.createEmployee);
