@@ -2,7 +2,8 @@ const express = require('express');
 const connectDB = require('./dbModels/db.config');
 const bodyparser = require('body-parser')
 const router = require("./controllers/routes")
-const cors = require("cors")
+const cors = require("cors");
+const fileUpload = require('express-fileupload');
 // require(dotenv).config()
 
 const PORT = process.env.PORT || 5467;
@@ -13,13 +14,17 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: "https://erp-pwa.netlify.app/",
+    origin: ["https://erp-pwa.netlify.app", "http://localhost:3000"]
+
 }))
 // Middleware to parse JSON
 app.use(bodyparser.json());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+}));
 
 app.use("*", (req, res, next) => {
-    console.log({body: req.body});
+    console.log({ body: req.body });
     next()
 })
 // Customer routes
