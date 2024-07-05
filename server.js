@@ -3,7 +3,8 @@ const connectDB = require('./dbModels/db.config');
 const bodyparser = require('body-parser')
 const router = require("./controllers/routes")
 const cors = require("cors")
-// require(dotenv).config()
+const dotenv = require('dotenv')
+dotenv.config()
 
 const PORT = process.env.PORT || 5467;
 
@@ -19,7 +20,7 @@ app.use(cors({
 app.use(bodyparser.json());
 
 app.use("*", (req, res, next) => {
-    console.log({body: req.body});
+    console.log({ body: req.body });
     next()
 })
 // Customer routes
