@@ -27,9 +27,9 @@ const getAllSales = async (req, res) => {
 
 // Create a new sale
 const createSale = async (req, res) => {
-    const { customer_id, items_id, employee_id, date_of_sale, payment_id } = req.body;
+    const { customer_id, items_id, employee_id, date_of_sale, payment_id, totalAmount } = req.body;
     try {
-        const newSale = new Sale({ customer_id, items_id, employee_id, date_of_sale, payment_id });
+        const newSale = new Sale({ customer_id, items_id, employee_id, date_of_sale, payment_id, totalAmount});
         await newSale.save();
         res.status(201).json(newSale);
     } catch (error) {
