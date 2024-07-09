@@ -1,7 +1,7 @@
 const cloudinary = require('../configs/cloudinaryConfig');
 
 // Upload image to Cloudinary
-const cloudinaryImage = async (image) => {
+const uploadImageToCloudinary = async (image) => {
     try {
         console.log({ image });
         const result = await cloudinary.uploader.upload(`data:${image.mimetype};base64,${btoa(Buffer.from(image?.data).toString('binary'))}`, {
@@ -14,4 +14,4 @@ const cloudinaryImage = async (image) => {
     }
 };
 
-module.exports = cloudinaryImage;
+module.exports = {uploadImageToCloudinary};
