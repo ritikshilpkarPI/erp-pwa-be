@@ -1,10 +1,15 @@
+const { default: mongoose } = require('mongoose');
+const { uploadImageToCloudinary } = require('../util/cloudinaryUtils');
 const Item = require('../dbModels/item.model');
 
 // Create a new item
 const createItem = async (req, res) => {
-    const { name, prize, category_id, sold_by, img_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode } = req.body;
+    const { img_url } = req.files;
+    const { name, prize, category_id, sold_by, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode } = req.body;
     try {
-        const newItem = new Item({ name, prize, category_id, sold_by, img_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
+        const result = await uploadImageToCloudinary(img_url);
+        const category_uid = new mongoose.Types.ObjectId().toString();
+        const newItem = new Item({ name, prize, category_id: category_uid, sold_by, img_url: result.secure_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
         await newItem.save();
         res.status(201).json(newItem);
     } catch (error) {

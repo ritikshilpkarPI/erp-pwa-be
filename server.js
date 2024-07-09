@@ -4,7 +4,9 @@ const bodyparser = require('body-parser')
 const router = require("./controllers/routes")
 const cors = require("cors");
 const fileUpload = require('express-fileupload');
-// require(dotenv).config()
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const PORT = process.env.PORT || 5467;
 
@@ -13,8 +15,10 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+
+
 app.use(cors({
-    origin: ["https://erp-pwa.netlify.app","http://localhost:3000", "https://main--erp-pwa.netlify.app"],
+    origin: ["https://erp-pwa.netlify.app", "http://localhost:3000", "https://main--erp-pwa.netlify.app"],
 }))
 // Middleware to parse JSON
 app.use(bodyparser.json());
