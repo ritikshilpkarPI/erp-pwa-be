@@ -7,6 +7,7 @@ const SaleSchema = new Schema({
     employee_id: { type: Schema.Types.ObjectId, ref: 'Employee' },
     date_of_sale: { type: Date },
     payment_id: { type: Schema.Types.ObjectId, ref: 'Payment' },
+    totalAmount: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model('Sale', SaleSchema);
