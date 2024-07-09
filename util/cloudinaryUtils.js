@@ -3,7 +3,7 @@ const cloudinary = require('../configs/cloudinaryConfig');
 // Upload image to Cloudinary
 const uploadImageToCloudinary = async (image) => {
     try {
-        console.log({ image });
+        
         const result = await cloudinary.uploader.upload(`data:${image.mimetype};base64,${btoa(Buffer.from(image?.data).toString('binary'))}`, {
             folder: 'ERP'
         });
