@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 const dotenv = require('dotenv')
@@ -14,16 +13,16 @@ const transporter = nodemailer.createTransport({
 });
 
 const generateOTP = () => {
-      return crypto.randomInt(1000, 9999).toString();
-};
+      return Math.floor(1000 + Math.random() * 9000).toString();
+    };
+    
 
 const sendOTP = (email, otp) => {
-      console.log(email, otp)
       const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Your OTP Code',
-            text: `Your OTP code is ${otp}`,
+            subject: 'Invoicify OTP',
+            text: `Your OTP code for email verification is ${otp}`,
       };
 
       return transporter.sendMail(mailOptions);

@@ -1,15 +1,15 @@
 const Employee = require('../dbModels/employe.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { generateOTP, sendOTP } = require('../util/sendOtp.js')
+const { generateOTP, sendOTP } = require('../util/sendEmail.js')
 
 // Sign Up
 const signup = async (req, res) => {
     const { name, email, password } = req.body;
     try {
-        const employeeExists = await Employee.findOne({ email });
-        if (employeeExists) {
-            return res.status(400).json({ error: { message: 'Employee already exists' } });
+        const emailExists = await Employee.findOne({ email });
+        if (emailExists) {
+            return res.status(400).json({ error: { message: 'Email already exists' } });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -18,13 +18,20 @@ const signup = async (req, res) => {
         const newEmployee = new Employee({ name, email, password: hashedPassword });
         await newEmployee.save();
 
-        const token = jwt.sign({ employeeId: newEmployee._id }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '1h' });
+        const employeeData = {
+            _id: newEmployee._id,
+            name: newEmployee.name,
+            email: newEmployee.email,
+        };
+
+        const token = jwt.sign({ employee: employeeData }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '24h' });
 
         res.status(201).json({ token });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Login
 const login = async (req, res) => {
@@ -40,7 +47,15 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ name: employee.name, email: employee.email }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '1h' });
+
+        const employeeData = {
+            _id: employee._id,
+            name: employee.name,
+            email: employee.email,
+
+        };
+
+        const token = jwt.sign({ user: employeeData }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '1h' });
 
         res.cookie('token', token, { httpOnly: false, secure: false, sameSite: 'none' });
 
@@ -68,10 +83,10 @@ const verifyToken = (req, res, next) => {
 
 // Generate and send OTP
 const generateAndSendOTP = async (req, res) => {
-    const { input } = req.body;
+    const { email } = req.body;
 
     try {
-        const employee = await Employee.findOne({ email: input });
+        const employee = await Employee.findOne({ email });
         if (!employee) {
             return res.status(400).json({ message: 'Employee not found' });
         }
@@ -81,7 +96,7 @@ const generateAndSendOTP = async (req, res) => {
         employee.otpExpires = Date.now() + 300000; // OTP expires in 5 minutes
         await employee.save();
 
-        await sendOTP(employee.email, otp);
+        await sendOTP(email, otp);
 
         res.status(200).json({ message: 'OTP sent successfully', email: employee.email });
     } catch (error) {
@@ -91,21 +106,22 @@ const generateAndSendOTP = async (req, res) => {
 
 // Verify OTP
 const verifyOTP = async (req, res) => {
-    const { otp } = req.body;
+    const { email, otp } = req.body;
+
     try {
-        const employee = await Employee.findOne({ otp, otpExpires: { $gt: Date.now() } });
+        const employee = await Employee.findOne({ email, otp, otpExpires: { $gt: Date.now() } });
         if (!employee) {
-            return res.status(400).json({ message: 'Employee not found or OTP expired' });
+            return res.status(400).json({ message: 'Invalid OTP or email' });
         }
 
-        // Generate a temporary token for password change
-        const tempToken = jwt.sign({ email: employee.email }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '5m' });
+        const tempToken = jwt.sign({ email: employee.email }, process.env.JWT_SECRET || 'JWT_SECRET', { expiresIn: '24h' });
 
         res.status(200).json({ tempToken, message: 'OTP verified', email: employee.email });
     } catch (error) {
-        res.status(500).json({ message: 'Error verifying OTP. Please try again later.' });
+        res.status(400).json({ message: 'Error verifying OTP. Please try again later.' });
     }
-};
+}
+
 
 // Change Password
 const changePassword = async (req, res) => {

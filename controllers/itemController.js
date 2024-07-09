@@ -41,7 +41,6 @@ const getAllItems = async (req, res) => {
         }
 
         const items = await Item.find(query);
-        console.log(items);
 
         if (items.length === 0) {
             return res.status(404).json({ message: 'No items found' });
