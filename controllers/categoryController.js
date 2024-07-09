@@ -1,28 +1,9 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Category = require('../dbModels/category.model');
-const cloudinary = require('cloudinary').v2;
+const cloudinaryImage = require('../configs/cloudinaryUploader')
 
-// Configure Cloudinary using environment variables
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
-// Upload image to Cloudinary
-const cloudinaryImage = async (image) => {
-    try {
-        console.log({ image });
-        const result = await cloudinary.uploader.upload(`data:${image.mimetype};base64,${btoa(Buffer.from(image?.data).toString('binary'))}`, {
-            folder: 'ERP' 
-        });
-        return result;
-    } catch (error) {
-        console.error('Error uploading image to Cloudinary:', error);
-        throw error;
-    }
-};
 
 // Create a new category
 const createCategory = async (req, res) => {
