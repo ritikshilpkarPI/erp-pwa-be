@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Category = require('../dbModels/category.model');
-const cloudinaryImage = require('../configs/cloudinaryUploader')
+const cloudinaryImage = require('../util/cloudinaryUtils')
 
 
 
@@ -13,7 +13,7 @@ const createCategory = async (req, res) => {
         const result = await cloudinaryImage(category_image);
         console.log({ result, req: req.files });
         // Generate a unique ID for the category
-        const category_id = new mongoose.Types.ObjectId().toString();
+        
 
         // Create a new category object
         const newCategory = new Category({

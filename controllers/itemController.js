@@ -1,5 +1,5 @@
 const { default: mongoose } = require('mongoose');
-const cloudinaryImage = require('../configs/cloudinaryUploader');
+const cloudinaryImage = require('../util/cloudinaryUtils');
 const Item = require('../dbModels/item.model');
 
 // Create a new item
