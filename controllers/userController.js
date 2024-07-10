@@ -30,7 +30,7 @@ const signup = async (req, res) => {
   
       res.status(201).json({ token });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(400).json({ message: error.message });
     }
 };
 
@@ -60,7 +60,7 @@ const login = async (req, res) => {
 
     res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -95,7 +95,7 @@ const generateAndSendOTP = async (req, res) => {
     user.otpExpires = Date.now() + (5 * 60 * 1000); // OTP expires in 5 minutes
     await user.save();
 
-    await sendEmail(email, otp);
+    await sendEmail(email, otp, 'Invoicify OTP', 'Your OTP code for email verification is');
 
     res.status(200).json({ message: 'OTP sent successfully', email: user.email });
   } catch (error) {
@@ -141,7 +141,7 @@ const changePassword = async (req, res) => {
 
     res.status(200).json({ message: 'Password changed successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 

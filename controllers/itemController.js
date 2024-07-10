@@ -13,7 +13,7 @@ const createItem = async (req, res) => {
         await newItem.save();
         res.status(201).json(newItem);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -28,7 +28,7 @@ const getItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -54,7 +54,7 @@ const getAllItems = async (req, res) => {
         res.json(items);
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
      
@@ -77,7 +77,7 @@ const updateItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -92,7 +92,7 @@ const deleteItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
