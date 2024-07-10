@@ -8,6 +8,7 @@ const saleController = require('./saleController');
 const paymentController = require('./paymentController');
 const userController = require('./userController');
 
+
 router.get("/get", (req, res) => {
     console.log("called");
     res.end()
@@ -66,6 +67,11 @@ router.delete('/payments/:id', paymentController.deletePaymentById);
 
 router.post('/signup', userController.signup);
 router.post('/signin', userController.login);
+router.post('/generate-otp', userController.generateAndSendOTP);
+router.post('/verify-otp', userController.verifyOTP);
+router.post('/change-password', userController.changePassword);
+router.post('/resend-otp', userController.generateAndSendOTP);
+
 
 
 module.exports = router

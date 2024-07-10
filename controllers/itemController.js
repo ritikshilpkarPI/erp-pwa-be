@@ -13,7 +13,7 @@ const createItem = async (req, res) => {
         await newItem.save();
         res.status(201).json(newItem);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -28,32 +28,38 @@ const getItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
 // Get all items
 const getAllItems = async (req, res) => {
     try {
-        const { category_id, search_query } = req.query;
-
+        const { category_id, name } = req.query;
         const query = {};
 
         if (category_id) {
             query.category_id = category_id;
-
         }
-        if (search_query) {
-            query.name = { $regex: search_query, $options: 'i' };
-
+        if (name) {
+            query.name = { $regex: name, $options: 'i' };
         }
-        console.log(query)
+
         const items = await Item.find(query);
+
+        if (items.length === 0) {
+            return res.status(404).json({ message: 'No items found' });
+        }
+
         res.json(items);
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
+     
+
+
 
 // Update item by ID
 const updateItemById = async (req, res) => {
@@ -71,7 +77,7 @@ const updateItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -86,7 +92,7 @@ const deleteItemById = async (req, res) => {
             res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
