@@ -1,14 +1,14 @@
-const nodeMailerConfig = require('../configs/nodeMailerConfig');
+const transporter = require('../configs/nodeMailerConfig');
 
-const sendEmail = (email, otp, subject, text) => {
+const sendEmail = (email, otp, subject, message) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: subject,
-    text: `${text} ${otp}`,
+    text: `${message} ${otp}`,
   };
 
-  return nodeMailerConfig.sendMail(mailOptions);
+  return transporter.sendMail(mailOptions);
 };
 
 module.exports = sendEmail;

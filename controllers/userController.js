@@ -1,37 +1,37 @@
-const Employee = require('../dbModels/employe.model');
+const User = require('../dbModels/employe.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../util/sendEmail');
 const getRandomNumber = require('../util/randomNumber');
-const generateToken = require('../util/generateToken'); 
+const generateToken = require('../util/generateToken');
 
 // Sign Up
 const signup = async (req, res) => {
-    const { name, email, password } = req.body;
-    try {
-      const user = await User.findOne({ email });
-      if (user) {
-        return res.status(400).json({ error: { message: 'Email already exists' } });
-      }
-  
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      const newUser = new User({ name, email, password: hashedPassword });
-      await newUser.save();
-  
-      const userData = {
-        _id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-      };
-  
-      const token = generateToken(userData, '24h');
-  
-      res.status(201).json({ token });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+  const { name, email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ error: { message: 'Email already exists' } });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+
+    const userData = {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+    };
+
+    const token = generateToken(userData, '24h');
+
+    res.status(201).json({ token });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 // Login
