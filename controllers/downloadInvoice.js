@@ -113,7 +113,6 @@ totalQuantity = 0
     doc.text('QTY', 140, 77);
     doc.text('VALUE (Rs.)', 170, 77);
 
-    // Add table content dynamically
 
     let startY = 85;
 
