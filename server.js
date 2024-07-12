@@ -30,6 +30,10 @@ app.use("*", (req, res, next) => {
     next()
 })
 
+app.get('/', (req, res) => res.json('hello wolrd'));
+
+
+
 // Customer routes
 app.use("/api/v1", router)
 
