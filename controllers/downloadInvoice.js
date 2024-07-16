@@ -1,4 +1,5 @@
 const { jsPDF } = require("jspdf");
+
 const customerModel = require('../dbModels/customer.model');
 const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
@@ -6,9 +7,10 @@ const itemModel = require('../dbModels/item.model');
 const getCustomerById = async (id) => {
     try {
         const customer = await customerModel.findById(id);
-        return customer ;
+        return customer;
     } catch (error) {
         console.log(error);
+
     }
 };
 
@@ -18,14 +20,21 @@ const getEmployeeById = async (id) => {
         return employee;
     } catch (error) {
         console.log(error);
+        return { error: 'Something went wrong' };
     }
 };
 
+let totalQuantity;
 const getItemById = async (items) => {
+    totalQuantity = 0;
     try {
 
         const itemPromises = items.map(async (item) => {
             const foundItem = await itemModel.findById(item._id);
+            if (!foundItem) {
+                return { error: 'Item not found' };
+            }
+            totalQuantity += item._count;
 
             return {
                 _name: foundItem.name,
@@ -36,9 +45,15 @@ const getItemById = async (items) => {
 
         const resolvedItems = await Promise.all(itemPromises);
 
+        
+        resolvedItems.forEach(item => {
+            item._totalQuantity = totalQuantity;
+        });
+
         return resolvedItems;
     } catch (error) {
         console.log(error);
+        return "something went wrong"
     }
 };
 
@@ -54,6 +69,7 @@ exports.downloadInvoice = async (req, res, next) => {
         totalAmount
     } = req.body;
 
+
     const customer = await getCustomerById(customer_id);
     const employee = await getEmployeeById(employee_id);
     const formattedItems = await getItemById(items);
@@ -61,10 +77,8 @@ exports.downloadInvoice = async (req, res, next) => {
     const datePart = dateOfSale.toISOString().slice(0, 10);
     const timePart = dateOfSale.toISOString().slice(11, 19);
 
-    const doc = new jsPDF();  
+    const doc = new jsPDF();
 
-
-    // Add header text
     doc.setFontSize(10);
     doc.text('Avenue E-Commerce Limited', 70, 20);
     doc.text('Avenue E-Commerce Ltd. Survey No. 6, Hissa No. 15, Barave Village Near Godrej Hill,', 70, 25);
@@ -76,7 +90,7 @@ exports.downloadInvoice = async (req, res, next) => {
     doc.text(`DELIVERY ADDRESS: ${totalAmount}`, 10, 60);
     doc.text(`PAYMENT MODE: ${totalAmount}`, 130, 45);
     doc.text(`TOTAL ITEMS: ${formattedItems.length}`, 130, 50);
-    doc.text(`TOTAL QUANTITY:`, 130, 55);
+    doc.text(`TOTAL QUANTITY: ${totalQuantity}`, 130, 55);
 
     // Table header
     doc.setFontSize(10);
@@ -86,8 +100,6 @@ exports.downloadInvoice = async (req, res, next) => {
     doc.text('CATEGORY', 65, 77);
     doc.text('QTY', 140, 77);
     doc.text('VALUE (Rs.)', 170, 77);
-
-    // Add table content dynamically
 
     let startY = 85;
 
@@ -100,7 +112,7 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`${item._prize}`, 100, startY);
         doc.text(`${item._count}`, 140, startY);
         doc.text(`${item._prize * item._count}`, 170, startY);
-        startY += 10; 
+        startY += 10;
     });
     doc.text('SUB TOTAL:', 140, startY + 10);
     doc.text(`${totalAmount}`, 170, startY + 10);
