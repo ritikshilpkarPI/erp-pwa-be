@@ -7,6 +7,7 @@ const receivableController = require('./receivableController');
 const saleController = require('./saleController');
 const paymentController = require('./paymentController');
 const userController = require('./userController');
+const { downloadInvoice } = require("./downloadInvoice");
 
 
 router.get("/get", (req, res) => {
@@ -72,6 +73,8 @@ router.post('/verify-otp', userController.verifyOTP);
 router.post('/change-password', userController.changePassword);
 router.post('/resend-otp', userController.generateAndSendOTP);
 
+
+router.post('/download-invoice', downloadInvoice)
 
 
 module.exports = router
