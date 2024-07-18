@@ -4,7 +4,7 @@ const customerModel = require('../dbModels/customer.model');
 const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
 
-exports.getCustomerById = async (id) => {
+const getCustomerById = async (id) => {
     try {
         const customer = await customerModel.findById(id);
         return customer;
@@ -14,7 +14,7 @@ exports.getCustomerById = async (id) => {
     }
 };
 
-exports.getEmployeeById = async (id) => {
+const getEmployeeById = async (id) => {
     try {
         const employee = await employeModel.findById(id);
         return employee;
@@ -25,17 +25,15 @@ exports.getEmployeeById = async (id) => {
 };
 
 let totalQuantity;
-exports.getItemById = async (items) => {
+const getItemById = async (items) => {
     totalQuantity = 0;
     try {
-
         const itemPromises = items.map(async (item) => {
             const foundItem = await itemModel.findById(item._id);
             if (!foundItem) {
                 return { error: 'Item not found' };
             }
             totalQuantity += item._count;
-
             return {
                 _name: foundItem.name,
                 _prize: foundItem.prize,

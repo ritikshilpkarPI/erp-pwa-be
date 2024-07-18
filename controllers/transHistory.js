@@ -1,5 +1,6 @@
+const itemModel = require('../dbModels/item.model');
 const Sale = require('../dbModels/sale.model');
-const { getItemById } = require('./downloadInvoice');
+
 
 const getSaleById = async (id) => {
     try {
@@ -11,6 +12,37 @@ const getSaleById = async (id) => {
         }
     } catch (error) {
         console.log(error);
+    }
+};
+
+let totalQuantity;
+const getItemById = async (items) => {
+    totalQuantity = 0;
+    try {
+        const itemPromises = items.map(async (item) => {
+            const foundItem = await itemModel.findById(item._id);
+            if (!foundItem) {
+                return { error: 'Item not found' };
+            }
+            totalQuantity += item._count;
+            return {
+                _name: foundItem.name,
+                _prize: foundItem.prize,
+                _count: item._count,
+            };
+        });
+
+        const resolvedItems = await Promise.all(itemPromises);
+
+
+        resolvedItems.forEach(item => {
+            item._totalQuantity = totalQuantity;
+        });
+
+        return resolvedItems;
+    } catch (error) {
+        console.log(error);
+        return "something went wrong"
     }
 };
 
