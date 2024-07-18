@@ -4,7 +4,7 @@ const customerModel = require('../dbModels/customer.model');
 const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
 
-const getCustomerById = async (id) => {
+exports.getCustomerById = async (id) => {
     try {
         const customer = await customerModel.findById(id);
         return customer;
@@ -14,7 +14,7 @@ const getCustomerById = async (id) => {
     }
 };
 
-const getEmployeeById = async (id) => {
+exports.getEmployeeById = async (id) => {
     try {
         const employee = await employeModel.findById(id);
         return employee;
@@ -25,7 +25,7 @@ const getEmployeeById = async (id) => {
 };
 
 let totalQuantity;
-const getItemById = async (items) => {
+exports.getItemById = async (items) => {
     totalQuantity = 0;
     try {
 
@@ -45,7 +45,7 @@ const getItemById = async (items) => {
 
         const resolvedItems = await Promise.all(itemPromises);
 
-        
+
         resolvedItems.forEach(item => {
             item._totalQuantity = totalQuantity;
         });
@@ -129,3 +129,4 @@ exports.downloadInvoice = async (req, res, next) => {
     const pdfBuffer = doc.output('arraybuffer');
     res.send(Buffer.from(pdfBuffer));
 };
+
