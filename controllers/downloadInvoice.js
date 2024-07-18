@@ -28,14 +28,12 @@ let totalQuantity;
 const getItemById = async (items) => {
     totalQuantity = 0;
     try {
-
         const itemPromises = items.map(async (item) => {
             const foundItem = await itemModel.findById(item._id);
             if (!foundItem) {
                 return { error: 'Item not found' };
             }
             totalQuantity += item._count;
-
             return {
                 _name: foundItem.name,
                 _prize: foundItem.prize,
@@ -45,7 +43,7 @@ const getItemById = async (items) => {
 
         const resolvedItems = await Promise.all(itemPromises);
 
-        
+
         resolvedItems.forEach(item => {
             item._totalQuantity = totalQuantity;
         });
@@ -129,3 +127,4 @@ exports.downloadInvoice = async (req, res, next) => {
     const pdfBuffer = doc.output('arraybuffer');
     res.send(Buffer.from(pdfBuffer));
 };
+

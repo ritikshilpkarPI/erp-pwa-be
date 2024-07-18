@@ -8,6 +8,8 @@ const saleController = require('./saleController');
 const paymentController = require('./paymentController');
 const userController = require('./userController');
 const { downloadInvoice } = require("./downloadInvoice");
+const { transationHistory } = require("./transHistory");
+
 
 
 router.get("/get", (req, res) => {
@@ -74,7 +76,9 @@ router.post('/change-password', userController.changePassword);
 router.post('/resend-otp', userController.generateAndSendOTP);
 
 
-router.post('/download-invoice', downloadInvoice)
+router.post('/download-invoice', downloadInvoice);
+
+router.post('/transaction-history', transationHistory);
 
 
 module.exports = router
