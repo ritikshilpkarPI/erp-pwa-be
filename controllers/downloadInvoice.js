@@ -67,6 +67,7 @@ exports.downloadInvoice = async (req, res, next) => {
         payment_id,
         totalAmount
     } = req.body;
+    const { email } = req.query;
 
 
     const customer = await getCustomerById(customer_id);
@@ -126,7 +127,7 @@ exports.downloadInvoice = async (req, res, next) => {
 
     // Send the PDF buffer as the response
     const pdfBuffer = doc.output('arraybuffer');
-    await sendPDFtomail("akshugajbhiye26@gmail.com", "0001", "thankyou for purchasing", Buffer.from(pdfBuffer));
+    await sendPDFtomail(email, "0001", "thankyou for purchasing", Buffer.from(pdfBuffer));
     console.log("send successfull");
     res.send(Buffer.from(pdfBuffer));
 };
