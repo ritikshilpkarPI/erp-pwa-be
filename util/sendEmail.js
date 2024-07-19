@@ -11,4 +11,26 @@ const sendEmail = (email, otp, subject, message) => {
   return transporter.sendMail(mailOptions);
 };
 
-module.exports = sendEmail;
+const sendPDFtomail = (email, otp, subject, pdf) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: subject,
+    text: ` ${otp}`,
+    attachments: [
+      {
+        filename: 'invoice.pdf',
+        content: pdf,
+        contentType: 'application/pdf',
+      },
+    ],
+  };
+
+  return transporter.sendMail(mailOptions);
+};
+
+
+
+
+
+module.exports = { sendEmail, sendPDFtomail };

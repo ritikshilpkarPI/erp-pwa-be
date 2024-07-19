@@ -3,6 +3,7 @@ const { jsPDF } = require("jspdf");
 const customerModel = require('../dbModels/customer.model');
 const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
+const { sendPDFtomail } = require("../util/sendEmail");
 
 const getCustomerById = async (id) => {
     try {
@@ -125,6 +126,8 @@ exports.downloadInvoice = async (req, res, next) => {
 
     // Send the PDF buffer as the response
     const pdfBuffer = doc.output('arraybuffer');
+    await sendPDFtomail("akshugajbhiye26@gmail.com", "0001", "thankyou for purchasing", Buffer.from(pdfBuffer));
+    console.log("send successfull");
     res.send(Buffer.from(pdfBuffer));
 };
 
