@@ -9,6 +9,7 @@ const paymentController = require('./paymentController');
 const userController = require('./userController');
 const { downloadInvoice } = require("./downloadInvoice");
 const { transationHistory } = require("./transHistory");
+const { emailInvoice } = require("./emailInvoice");
 
 
 
@@ -77,6 +78,8 @@ router.post('/resend-otp', userController.generateAndSendOTP);
 
 
 router.post('/download-invoice', downloadInvoice);
+
+router.post('/email-invoice', emailInvoice);
 
 router.post('/transaction-history', transationHistory);
 

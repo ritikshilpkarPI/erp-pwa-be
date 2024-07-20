@@ -1,30 +1,15 @@
 const { jsPDF } = require("jspdf");
-
 const customerModel = require('../dbModels/customer.model');
 const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
-const Sale = require('../dbModels/sale.model');
-
-
-const getSaleById = async (id) => {
-    try {
-        const sale = await Sale.findById(id);
-        if (sale) {
-            return sale;
-        } else {
-            console.log("something went wrong");
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
+const { sendPDFtomail } = require("../util/sendEmail");
 
 const getCustomerById = async (id) => {
     try {
         const customer = await customerModel.findById(id);
         return customer;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error('Error fetching customer');
     }
 };
@@ -34,7 +19,7 @@ const getEmployeeById = async (id) => {
         const employee = await employeModel.findById(id);
         return employee;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error('Error fetching employee');
     }
 };
@@ -59,12 +44,12 @@ const getItemById = async (items) => {
         const resolvedItems = await Promise.all(itemPromises);
         return { resolvedItems, totalQuantity };
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new Error('Error fetching items');
     }
 };
 
-exports.downloadInvoice = async (req, res, next) => {
+exports.emailInvoice = async (req, res) => {
     try {
         const {
             _id,
@@ -75,12 +60,12 @@ exports.downloadInvoice = async (req, res, next) => {
             payment_id,
             totalAmount
         } = req.body;
+        const { email } = req.query;
 
-        const transactionid = await getSaleById(_id);
         const customer = await getCustomerById(customer_id);
         const employee = await getEmployeeById(employee_id);
         const { resolvedItems, totalQuantity } = await getItemById(items);
-        const dateOfSale = new Date(transactionid.date_of_sale);
+        const dateOfSale = new Date(date_of_sale);
         const datePart = dateOfSale.toISOString().slice(0, 10);
         const timePart = dateOfSale.toISOString().slice(11, 19);
 
@@ -120,7 +105,6 @@ exports.downloadInvoice = async (req, res, next) => {
             doc.text(`${item._prize * item._count}`, 170, startY);
             startY += 10;
         });
-
         doc.text('SUB TOTAL:', 140, startY + 10);
         doc.text(`${totalAmount}`, 170, startY + 10);
 
@@ -128,15 +112,14 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`ORDER TIME: ${timePart}`, 10, startY + 30);
         doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
 
-        // Set the response headers
-        res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
-        res.setHeader('Content-type', 'application/pdf');
-
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
-        res.send(Buffer.from(pdfBuffer));
+        await sendPDFtomail(email, "0001", "thank you for purchasing", Buffer.from(pdfBuffer));
+        console.log("Email sent successfully");
+
+        res.status(200).send({ message: "Email sent successfully" });
     } catch (error) {
-        console.log(error);
-        res.status(500).send({ error: 'Failed to generate invoice' });
+        console.error(error);
+        res.status(500).send({ error: 'Failed to send email' });
     }
 };
