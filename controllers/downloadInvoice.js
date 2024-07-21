@@ -80,7 +80,7 @@ exports.downloadInvoice = async (req, res, next) => {
         const customer = await getCustomerById(customer_id);
         const employee = await getEmployeeById(employee_id);
         const { resolvedItems, totalQuantity } = await getItemById(items);
-        const dateOfSale = new Date(transactionid.date_of_sale);
+        const dateOfSale = new Date(date_of_sale);
         const datePart = dateOfSale.toISOString().slice(0, 10);
         const timePart = dateOfSale.toISOString().slice(11, 19);
 

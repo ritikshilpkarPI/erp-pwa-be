@@ -114,7 +114,13 @@ exports.emailInvoice = async (req, res) => {
 
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
-        await sendPDFtomail(email, "0001", "thank you for purchasing", Buffer.from(pdfBuffer));
+        await sendPDFtomail(email, `If you have any questions or need further assistance, please feel free to reach out to our customer support team at support@invoicify.com.
+
+Thank you once again for choosing Invoicify. We look forward to serving you again soon.
+
+Best regards,
+
+The Invoicify Team`, "Thank you for shopping with Invoicify! We appreciate your business and hope you enjoy your purchase.", Buffer.from(pdfBuffer));
         console.log("Email sent successfully");
 
         res.status(200).send({ message: "Email sent successfully" });
