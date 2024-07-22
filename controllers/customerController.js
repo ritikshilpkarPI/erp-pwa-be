@@ -2,9 +2,9 @@ const Customer = require('../dbModels/customer.model');
 
 // Create a new customer
 const createCustomer = async (req, res) => {
-    const { name, address, id_number, credit_limit, telephone } = req.body;
+    const { name, address, id_number, email, credit_limit, telephone } = req.body;
     try {
-        const newCustomer = new Customer({ name, address, id_number, credit_limit, telephone });
+        const newCustomer = new Customer({ name, address, id_number, email, credit_limit, telephone });
         await newCustomer.save();
         res.status(201).json(newCustomer);
     } catch (error) {
