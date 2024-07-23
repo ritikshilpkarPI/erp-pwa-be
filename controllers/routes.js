@@ -10,6 +10,7 @@ const userController = require('./userController');
 const { downloadInvoice } = require("./downloadInvoice");
 const { transationHistory } = require("./transHistory");
 const { emailInvoice } = require("./emailInvoice");
+const { sendOtp } = require("./optSender");
 
 
 
@@ -82,6 +83,9 @@ router.post('/download-invoice', downloadInvoice);
 router.post('/email-invoice', emailInvoice);
 
 router.post('/transaction-history', transationHistory);
+
+
+router.post('/send-otp', sendOtp)
 
 
 module.exports = router
