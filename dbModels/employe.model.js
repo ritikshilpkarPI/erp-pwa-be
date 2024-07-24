@@ -6,7 +6,11 @@ const EmployeeSchema = new Schema({
     email: { type: String },
     password: { type: String },
     otp: { type: String },
-    otpExpires: { type: Date }
+    otpExpires: { type: Date },
+    phone_number: { type: Number },
+    address: { type: String },
+    business_name: { type: String }
+
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);

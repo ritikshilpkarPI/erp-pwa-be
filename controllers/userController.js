@@ -7,7 +7,7 @@ const generateToken = require('../util/generateToken');
 
 // Sign Up
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone_number, business_name, address } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -17,13 +17,16 @@ const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, phone_number, business_name, address, password: hashedPassword });
     await newUser.save();
 
     const userData = {
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      phone_number: newUser.phone_number,
+      business_name: newUser.business_name,
+      address: newUser.address,
     };
 
     const token = generateToken(userData, '24h');

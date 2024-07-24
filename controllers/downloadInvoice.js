@@ -88,9 +88,9 @@ exports.downloadInvoice = async (req, res, next) => {
 
         // Add content to PDF
         doc.setFontSize(10);
-        doc.text('Avenue E-Commerce Limited', 70, 20);
-        doc.text('Avenue E-Commerce Ltd. Survey No. 6, Hissa No. 15, Barave Village Near Godrej Hill,', 70, 25);
-        doc.text('Khadakpada, Kalyan West, Thane Maharashtra -421301', 70, 30);
+        doc.text(`${employee.business_name}`, 70, 20);
+        doc.text(`${employee.business_name}, ${employee.address}`, 70, 25);
+        doc.text(`${employee.name}`, 70, 30);
         doc.text('BILL INVOICE', 80, 35);
         doc.text(`CUSTOMER NAME: ${customer.name}`, 10, 45);
         doc.text(`MOBILE NUMBER: ${customer.telephone}`, 10, 50);
