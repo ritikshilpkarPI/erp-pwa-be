@@ -1,3 +1,5 @@
+const customerModel = require('../dbModels/customer.model');
+const employeModel = require('../dbModels/employe.model');
 const itemModel = require('../dbModels/item.model');
 const Sale = require('../dbModels/sale.model');
 
@@ -46,13 +48,38 @@ const getItemById = async (items) => {
     }
 };
 
+const getEmployeeById = async (id) => {
+    try {
+        const employee = await employeModel.findById(id);
+        return employee;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error fetching employee');
+    }
+};
+
+const getCustomerById = async (id) => {
+    try {
+        const customer = await customerModel.findById(id);
+        return customer;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error fetching customer');
+    }
+};
+
+
 exports.transationHistory = async (req, res, next) => {
     const { id } = req.body;
     const transaction = await getSaleById(id);
     const itemss = transaction['items'];
+    const employeData = await getEmployeeById(transaction['employee_id']);
+    const customer = await getCustomerById(transaction['customer_id']);
     const formatedItem = await getItemById(itemss);
     res.json({
         transaction: transaction,
-        items: formatedItem
+        customer: customer,
+        items: formatedItem,
+        employeData: employeData
     })
 }
