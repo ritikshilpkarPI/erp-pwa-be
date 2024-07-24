@@ -70,6 +70,8 @@ const getCustomerById = async (id) => {
 
 
 exports.transationHistory = async (req, res, next) => {
+
+    
     const { id } = req.body;
     const transaction = await getSaleById(id);
     const itemss = transaction['items'];
