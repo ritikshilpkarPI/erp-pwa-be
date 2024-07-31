@@ -1,7 +1,7 @@
 const User = require('../dbModels/employe.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('../util/sendEmail');
+const {sendEmail} = require('../util/sendEmail');
 const getRandomNumber = require('../util/randomNumber');
 const generateToken = require('../util/generateToken');
 
