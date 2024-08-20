@@ -27,7 +27,7 @@ const getAllSales = async (req, res) => {
 
 // Create a new sale
 const createSale = async (req, res) => {
-    const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount } = req.body;
+    const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount,cheques } = req.body;
 
     // Ensure items is defined and is an array
     if (!Array.isArray(items)) {
@@ -47,6 +47,7 @@ const createSale = async (req, res) => {
             employee_id, 
             date_of_sale, 
             payment_id, 
+            cheques,
             totalAmount: parseFloat(totalAmount) // Ensure totalAmount is a number
         });
         await newSale.save();
