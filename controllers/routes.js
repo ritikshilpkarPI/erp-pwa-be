@@ -11,6 +11,8 @@ const { downloadInvoice } = require("./downloadInvoice");
 const { transationHistory } = require("./transHistory");
 const { emailInvoice } = require("./emailInvoice");
 const { sendOtp } = require("./optSender");
+const { shareInvoice } = require("./shareInvoice");
+const { whatsAppInvoice } = require("./whatsAppInvoice");
 
 
 
@@ -82,8 +84,12 @@ router.post('/download-invoice', downloadInvoice);
 
 router.post('/email-invoice', emailInvoice);
 
+
+router.post('/whatsApp-invoice', whatsAppInvoice);
+
 router.post('/transaction-history', transationHistory);
 
+router.get('/share-invoice:id',shareInvoice)
 
 router.post('/send-otp', sendOtp)
 
