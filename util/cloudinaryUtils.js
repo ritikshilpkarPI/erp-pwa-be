@@ -13,5 +13,22 @@ const uploadImageToCloudinary = async (image) => {
         throw error;
     }
 };
+const uploadPdfToCloudinary = async (pdfBuffer) => {
+    try {
+        // Create a base64 string from the PDF buffer
+        const base64Data = pdfBuffer.toString('base64');
 
-module.exports = {uploadImageToCloudinary};
+        // Upload the PDF buffer to Cloudinary as raw data
+        const result = await cloudinary.uploader.upload(`data:application/pdf;base64,${base64Data}`, {
+            folder: 'ERP',
+            resource_type: 'raw' // Specify raw resource type for non-image files
+        });
+
+        return result;
+    } catch (error) {
+        console.error('Error uploading PDF to Cloudinary:', error);
+        throw error;
+    }
+};
+
+module.exports = {uploadImageToCloudinary,uploadPdfToCloudinary};

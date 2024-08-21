@@ -13,13 +13,15 @@ const chequeList = new Schema({
   date:{type:Date}
 })
 const SaleSchema = new Schema({
+  TXN_id: {type:String},
   customer_id: { type: Schema.Types.ObjectId, ref: 'Customer' },
   items: [ItemSchema],
   employee_id: { type: Schema.Types.ObjectId, ref: 'Employee' },
   date_of_sale: { type: Date },
   payment_id: { type: Schema.Types.ObjectId, ref: 'Payment' },
   totalAmount: { type: Number, default: 0 },
-  cheques:[chequeList]
+  cheques:[chequeList],
+  download_link:{type:String}
 });
 
 module.exports = mongoose.model('Sale', SaleSchema);
