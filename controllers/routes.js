@@ -89,7 +89,7 @@ router.post('/whatsApp-invoice', whatsAppInvoice);
 
 router.post('/transaction-history', transationHistory);
 
-router.get('/share-invoice:id',shareInvoice)
+router.post('/share-invoice',shareInvoice)
 
 router.post('/send-otp', sendOtp)
 
