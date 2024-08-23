@@ -78,6 +78,7 @@ router.post('/generate-otp', userController.generateAndSendOTP);
 router.post('/verify-otp', userController.verifyOTP);
 router.post('/change-password', userController.changePassword);
 router.post('/resend-otp', userController.generateAndSendOTP);
+router.post('/signin-number',userController.getUserByPhoneNumber)
 
 
 router.post('/download-invoice', downloadInvoice);

@@ -1,7 +1,7 @@
 const User = require('../dbModels/employe.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {sendEmail} = require('../util/sendEmail');
+const { sendEmail } = require('../util/sendEmail');
 const getRandomNumber = require('../util/randomNumber');
 const generateToken = require('../util/generateToken');
 
@@ -64,6 +64,30 @@ const login = async (req, res) => {
     res.status(200).json({ token });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+const getUserByPhoneNumber = async (req, res) => {
+  const { phone_number } = req.body;
+  try {
+    const user = await User.findOne({ phone_number });
+    if (!user){
+      res.status(400).json({message:"user not fount"})
+    }
+    if (user) {
+      const userData = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      };
+      const token = generateToken(userData, '24h');
+      res.status(200).json({ exist: true, user: userData, token: token });
+    } else {
+      res.status(400).json({ exist: false });
+    }
+  } catch (error) {
+    console.error(error);    
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -155,4 +179,5 @@ module.exports = {
   generateAndSendOTP,
   verifyOTP,
   changePassword,
+  getUserByPhoneNumber
 };

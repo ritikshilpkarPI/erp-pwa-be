@@ -40,11 +40,11 @@ const getAllEmployees = async (req, res) => {
 // Update employee by ID
 const updateEmployeeById = async (req, res) => {
     const { id } = req.params;
-    const { name, username, business_name } = req.body;
+    const { name, username, business_name, phone_number } = req.body;
     try {
         const employee = await Employee.findByIdAndUpdate(
             id,
-            { name, username, business_name },
+            { name, username, business_name, phone_number },
             { new: true }
         );
         if (employee) {
