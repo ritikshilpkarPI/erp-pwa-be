@@ -10,10 +10,7 @@ const createCategory = async (req, res) => {
     const { category_image } = req.files;
     const { category_name, category_color } = req.body;
     try {
-        const result = await uploadImageToCloudinary(category_image);
-        
-        
-
+        const result = await uploadImageToCloudinary(category_image);      
         // Create a new category object
         const newCategory = new Category({
             category_name,

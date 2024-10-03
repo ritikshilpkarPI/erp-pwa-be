@@ -24,7 +24,7 @@ const getSaleById = async (req, res) => {
 // Get all sales
 const getAllSales = async (req, res) => {
     try {
-        const sales = await Sale.find();
+        const sales = await Sale.find().populate('customer_id','_id name');
         return res.json(sales);
     } catch (error) {
         return res.status(500).json({ message: error.message });
