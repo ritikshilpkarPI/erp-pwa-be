@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb+srv://yash:yash123@farzi-cluster.l3ob6ss.mongodb.net/erp-pwa?retryWrites=true&w=majority&appName=farzi-cluster', {
+        await mongoose.connect(process.env.DEV_DB, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
