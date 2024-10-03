@@ -98,11 +98,11 @@ const  shareInvoice = async (req, res) => {
 
         console.log(saleData);
         
-        res.json(saleData)
+        return res.json(saleData)
 
     } catch (error) {
         console.log(error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 };
 

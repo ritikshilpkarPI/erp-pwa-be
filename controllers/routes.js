@@ -18,7 +18,7 @@ const { whatsAppInvoice } = require("./whatsAppInvoice");
 
 router.get("/get", (req, res) => {
     console.log("called");
-    res.end()
+    return res.end()
 })
 router.get('/customers/:id', customerController.getCustomerById);
 router.get('/customers', customerController.getAllCustomers);

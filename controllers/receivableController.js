@@ -6,9 +6,9 @@ const createReceivable = async (req, res) => {
     try {
         const newReceivable = new Receivable({ customer_id, amount_owed, due_date, status });
         await newReceivable.save();
-        res.status(201).json(newReceivable);
+        return res.status(201).json(newReceivable);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -18,12 +18,12 @@ const getReceivableById = async (req, res) => {
     try {
         const receivable = await Receivable.findById(id);
         if (receivable) {
-            res.json(receivable);
+            return res.json(receivable);
         } else {
-            res.status(404).json({ message: 'Receivable not found' });
+            return res.status(404).json({ message: 'Receivable not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -31,9 +31,9 @@ const getReceivableById = async (req, res) => {
 const getAllReceivables = async (req, res) => {
     try {
         const receivables = await Receivable.find();
-        res.json(receivables);
+        return res.json(receivables);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -48,12 +48,12 @@ const updateReceivableById = async (req, res) => {
             { new: true }
         );
         if (receivable) {
-            res.json(receivable);
+            return res.json(receivable);
         } else {
-            res.status(404).json({ message: 'Receivable not found' });
+            return res.status(404).json({ message: 'Receivable not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -63,12 +63,12 @@ const deleteReceivableById = async (req, res) => {
     try {
         const receivable = await Receivable.findByIdAndDelete(id);
         if (receivable) {
-            res.json({ message: 'Receivable deleted' });
+            return res.json({ message: 'Receivable deleted' });
         } else {
-            res.status(404).json({ message: 'Receivable not found' });
+            return res.status(404).json({ message: 'Receivable not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

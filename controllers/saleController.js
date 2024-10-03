@@ -12,12 +12,12 @@ const getSaleById = async (req, res) => {
     try {
         const sale = await Sale.findById(id);
         if (sale) {
-            res.json(sale);
+            return res.json(sale);
         } else {
-            res.status(404).json({ message: 'Sale not found' });
+            return res.status(404).json({ message: 'Sale not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -25,9 +25,9 @@ const getSaleById = async (req, res) => {
 const getAllSales = async (req, res) => {
     try {
         const sales = await Sale.find();
-        res.json(sales);
+        return res.json(sales);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -197,10 +197,10 @@ const createSale = async (req, res) => {
             download_link:uploadResult.secure_url
         });
         await newSale.save();
-        res.status(201).json(newSale);
+        return res.status(201).json(newSale);
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -217,12 +217,12 @@ const updateSaleById = async (req, res) => {
             { new: true }
         );
         if (sale) {
-            res.json(sale);
+            return res.json(sale);
         } else {
-            res.status(404).json({ message: 'Sale not found' });
+            return res.status(404).json({ message: 'Sale not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -232,12 +232,12 @@ const deleteSaleById = async (req, res) => {
     try {
         const sale = await Sale.findByIdAndDelete(id);
         if (sale) {
-            res.json({ message: 'Sale deleted' });
+            return res.json({ message: 'Sale deleted' });
         } else {
-            res.status(404).json({ message: 'Sale not found' });
+            return res.status(404).json({ message: 'Sale not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

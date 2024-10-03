@@ -123,9 +123,9 @@ Best regards,
 The Invoicify Team`, "Thank you for shopping with Invoicify! We appreciate your business and hope you enjoy your purchase.", Buffer.from(pdfBuffer));
         console.log("Email sent successfully");
 
-        res.status(200).send({ message: "Email sent successfully" });
+        return res.status(200).send({ message: "Email sent successfully" });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: 'Failed to send email' });
+        return res.status(500).send({ error: 'Failed to send email' });
     }
 };

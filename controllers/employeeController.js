@@ -6,9 +6,9 @@ const createEmployee = async (req, res) => {
     try {
         const newEmployee = new Employee({ name, username, business_name });
         await newEmployee.save();
-        res.status(201).json(newEmployee);
+        return res.status(201).json(newEmployee);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -18,12 +18,12 @@ const getEmployeeById = async (req, res) => {
     try {
         const employee = await Employee.findById(id);
         if (employee) {
-            res.json(employee);
+            return res.json(employee);
         } else {
-            res.status(404).json({ message: 'Employee not found' });
+            return res.status(404).json({ message: 'Employee not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -31,9 +31,9 @@ const getEmployeeById = async (req, res) => {
 const getAllEmployees = async (req, res) => {
     try {
         const employees = await Employee.find();
-        res.json(employees);
+        return res.json(employees);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -48,12 +48,12 @@ const updateEmployeeById = async (req, res) => {
             { new: true }
         );
         if (employee) {
-            res.json(employee);
+            return res.json(employee);
         } else {
-            res.status(404).json({ message: 'Employee not found' });
+            return res.status(404).json({ message: 'Employee not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -63,12 +63,12 @@ const deleteEmployeeById = async (req, res) => {
     try {
         const employee = await Employee.findByIdAndDelete(id);
         if (employee) {
-            res.json({ message: 'Employee deleted' });
+            return res.json({ message: 'Employee deleted' });
         } else {
-            res.status(404).json({ message: 'Employee not found' });
+            return res.status(404).json({ message: 'Employee not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
