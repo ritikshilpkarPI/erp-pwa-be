@@ -14,10 +14,10 @@ const sendOtp = async (req, res) => {
 
     try {
         await sendEmail(email, otp, 'Your OTP', `Your OTP is `);
-        res.status(200).json(otp);
+        return res.status(200).json(otp);
     } catch (error) {
         console.error('Error sending OTP:', error);
-        res.status(500).json({ error: 'Failed to send OTP' });
+        return res.status(500).json({ error: 'Failed to send OTP' });
     }
 };
 

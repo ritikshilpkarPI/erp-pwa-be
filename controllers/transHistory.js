@@ -78,7 +78,7 @@ exports.transationHistory = async (req, res, next) => {
     const employeData = await getEmployeeById(transaction['employee_id']);
     const customer = await getCustomerById(transaction['customer_id']);
     const formatedItem = await getItemById(itemss);
-    res.json({
+    return res.json({
         transaction: transaction,
         customer: customer,
         items: formatedItem,

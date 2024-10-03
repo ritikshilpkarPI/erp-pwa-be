@@ -6,9 +6,9 @@ const createCustomer = async (req, res) => {
     try {
         const newCustomer = new Customer({ name, address, id_number, email, credit_limit, telephone });
         await newCustomer.save();
-        res.status(201).json(newCustomer);
+        return res.status(201).json(newCustomer);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -18,12 +18,12 @@ const getCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findById(id);
         if (customer) {
-            res.json(customer);
+            return res.json(customer);
         } else {
-            res.status(404).json({ message: 'Customer not found' });
+            return res.status(404).json({ message: 'Customer not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -31,9 +31,9 @@ const getCustomerById = async (req, res) => {
 const getAllCustomers = async (req, res) => {
     try {
         const customers = await Customer.find({ is_deleted: false });
-        res.json(customers);
+        return res.json(customers);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -48,12 +48,12 @@ const updateCustomerById = async (req, res) => {
             { new: true }
         );
         if (customer) {
-            res.json(customer);
+            return res.json(customer);
         } else {
-            res.status(404).json({ message: 'Customer not found' });
+            return res.status(404).json({ message: 'Customer not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -67,12 +67,12 @@ const softDeleteCustomerById = async (req, res) => {
             { new: true }
         );
         if (customer) {
-            res.json({ message: 'Customer deleted' });
+            return res.json({ message: 'Customer deleted' });
         } else {
-            res.status(404).json({ message: 'Customer not found' });
+            return res.status(404).json({ message: 'Customer not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -87,12 +87,12 @@ const changeCreditLimitByCustomerId = async (req, res) => {
             { new: true }
         );
         if (customer) {
-            res.json(customer);
+            return res.json(customer);
         } else {
-            res.status(404).json({ message: 'Customer not found' });
+            return res.status(404).json({ message: 'Customer not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

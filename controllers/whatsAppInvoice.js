@@ -48,10 +48,10 @@ const getSaleById = async (id) => {
         const whatsappUrl = `https://api.whatsapp.com/send?phone=${fullPhoneNumber}&text=Hello, here is your invoice: ${download_link}`;
 
         // Send the WhatsApp URL as JSON response
-        res.json({ whatsappUrl });
+        return res.json({ whatsappUrl });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to send invoice' });
+        return res.status(500).json({ error: 'Failed to send invoice' });
     }
 };
 

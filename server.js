@@ -25,11 +25,6 @@ app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
 }));
 
-app.use("*", (req, res, next) => {
-    console.log({ body: req.body });
-    next()
-})
-
 app.get('/', (req, res) => res.json('hello wolrd'));
 
 

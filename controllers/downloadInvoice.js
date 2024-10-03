@@ -129,14 +129,14 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
 
         // Set the response headers
-        res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
-        res.setHeader('Content-type', 'application/pdf');
+        return res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
+        return res.setHeader('Content-type', 'application/pdf');
 
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
-        res.send(Buffer.from(pdfBuffer));
+        return res.send(Buffer.from(pdfBuffer));
     } catch (error) {
         console.log(error);
-        res.status(500).send({ error: 'Failed to generate invoice' });
+        return res.status(500).send({ error: 'Failed to generate invoice' });
     }
 };

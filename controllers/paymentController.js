@@ -6,12 +6,12 @@ const getPaymentById = async (req, res) => {
     try {
         const payment = await Payment.findById(id);
         if (payment) {
-            res.json(payment);
+            return res.json(payment);
         } else {
-            res.status(404).json({ message: 'Payment not found' });
+            return res.status(404).json({ message: 'Payment not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -19,9 +19,9 @@ const getPaymentById = async (req, res) => {
 const getAllPayments = async (req, res) => {
     try {
         const payments = await Payment.find();
-        res.json(payments);
+        return res.json(payments);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -31,9 +31,9 @@ const createPayment = async (req, res) => {
     try {
         const newPayment = new Payment({ payment_date, payment_type, cheque_name, cheque_number, cheque_amount, cheque_date, sale_id });
         await newPayment.save();
-        res.status(201).json(newPayment);
+        return res.status(201).json(newPayment);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -48,12 +48,12 @@ const updatePaymentById = async (req, res) => {
             { new: true }
         );
         if (payment) {
-            res.json(payment);
+            return res.json(payment);
         } else {
-            res.status(404).json({ message: 'Payment not found' });
+            return res.status(404).json({ message: 'Payment not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -63,12 +63,12 @@ const deletePaymentById = async (req, res) => {
     try {
         const payment = await Payment.findByIdAndDelete(id);
         if (payment) {
-            res.json({ message: 'Payment deleted' });
+            return res.json({ message: 'Payment deleted' });
         } else {
-            res.status(404).json({ message: 'Payment not found' });
+            return res.status(404).json({ message: 'Payment not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

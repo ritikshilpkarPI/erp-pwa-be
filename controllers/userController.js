@@ -31,9 +31,9 @@ const signup = async (req, res) => {
 
     const token = generateToken(userData, '24h');
 
-    res.status(201).json({ token });
+    return res.status(201).json({ token });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -59,11 +59,11 @@ const login = async (req, res) => {
 
     const token = generateToken(userData, '24h');
 
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
+    return res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
 
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -72,7 +72,7 @@ const getUserByPhoneNumber = async (req, res) => {
   try {
     const user = await User.findOne({ phone_number });
     if (!user){
-      res.status(400).json({message:"user not fount"})
+      return res.status(400).json({message:"user not fount"})
     }
     if (user) {
       const userData = {
@@ -81,13 +81,13 @@ const getUserByPhoneNumber = async (req, res) => {
         email: user.email,
       };
       const token = generateToken(userData, '24h');
-      res.status(200).json({ exist: true, user: userData, token: token });
+      return res.status(200).json({ exist: true, user: userData, token: token });
     } else {
-      res.status(400).json({ exist: false });
+      return res.status(400).json({ exist: false });
     }
   } catch (error) {
     console.error(error);    
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -103,7 +103,7 @@ const verifyToken = (req, res, next) => {
     req.user = decoded.user;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Token is not valid' });
+    return res.status(401).json({ message: 'Token is not valid' });
   }
 };
 
@@ -124,9 +124,9 @@ const generateAndSendOTP = async (req, res) => {
 
     await sendEmail(email, otp, 'Invoicify OTP', 'Your OTP code for email verification is');
 
-    res.status(200).json({ message: 'OTP sent successfully', email: user.email });
+    return res.status(200).json({ message: 'OTP sent successfully', email: user.email });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
@@ -142,9 +142,9 @@ const verifyOTP = async (req, res) => {
 
     const tempToken = generateToken({ email: user.email });
 
-    res.status(200).json({ tempToken, message: 'OTP verified', email: user.email });
+    return res.status(200).json({ tempToken, message: 'OTP verified', email: user.email });
   } catch (error) {
-    res.status(400).json({ message: 'Error verifying OTP. Please try again later.' });
+    return res.status(400).json({ message: 'Error verifying OTP. Please try again later.' });
   }
 };
 
@@ -166,9 +166,9 @@ const changePassword = async (req, res) => {
     user.otpExpires = undefined;
     await user.save();
 
-    res.status(200).json({ message: 'Password changed successfully' });
+    return res.status(200).json({ message: 'Password changed successfully' });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 

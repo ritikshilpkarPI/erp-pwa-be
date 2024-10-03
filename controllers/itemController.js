@@ -10,9 +10,9 @@ const createItem = async (req, res) => {
         const result = await uploadImageToCloudinary(img_url);
         const newItem = new Item({ name, prize, category_id, sold_by, img_url: result.secure_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
         await newItem.save();
-        res.status(201).json(newItem);
+        return res.status(201).json(newItem);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
 
@@ -22,12 +22,12 @@ const getItemById = async (req, res) => {
     try {
         const item = await Item.findById(id);
         if (item) {
-            res.json(item);
+            return res.json(item);
         } else {
-            res.status(404).json({ message: 'Item not found' });
+            return res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
 
@@ -50,10 +50,10 @@ const getAllItems = async (req, res) => {
             return res.status(404).json({ message: 'No items found' });
         }
 
-        res.json(items);
+        return res.json(items);
 
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
      
@@ -71,12 +71,12 @@ const updateItemById = async (req, res) => {
             { new: true }
         );
         if (item) {
-            res.json(item);
+            return res.json(item);
         } else {
-            res.status(404).json({ message: 'Item not found' });
+            return res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
 
@@ -86,12 +86,12 @@ const deleteItemById = async (req, res) => {
     try {
         const item = await Item.findByIdAndDelete(id);
         if (item) {
-            res.json({ message: 'Item deleted' });
+            return res.json({ message: 'Item deleted' });
         } else {
-            res.status(404).json({ message: 'Item not found' });
+            return res.status(404).json({ message: 'Item not found' });
         }
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
 
