@@ -51,14 +51,18 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    let deviceName = user?.devices?.deviceID;
+    const deviceMap = { ...user.devices } || {};
+    let deviceName = deviceMap[deviceID];
 
     if(!deviceName){
-        user.devices = user.devices || {};
-        const deviceCount = Object.keys(user.devices).length + 1;
+        const deviceCount = Object.keys(deviceMap).length + 1;
         deviceName = `POS-${deviceCount}`;
-        user.devices[deviceID] = deviceName;
-        await user.save();
+        deviceMap[deviceID] = deviceName;
+        await User.findByIdAndUpdate(
+            user._id,
+            { devices: deviceMap },
+            { new: true }
+        );
     }
 
     const userData = {
@@ -86,10 +90,24 @@ const getUserByPhoneNumber = async (req, res) => {
       return res.status(400).json({message:"user not fount"})
     }
     if (user) {
+        const deviceMap = { ...user.devices } || {};
+        let deviceName = deviceMap[deviceID];
+
+        if(!deviceName){
+            const deviceCount = Object.keys(deviceMap).length + 1;
+            deviceName = `POS-${deviceCount}`;
+            deviceMap[deviceID] = deviceName;
+            await User.findByIdAndUpdate(
+                user._id,
+                { devices: deviceMap },
+                { new: true }
+            );
+        }
       const userData = {
         _id: user._id,
         name: user.name,
         email: user.email,
+        deviceName
       };
       const token = generateToken(userData, '24h');
       return res.status(200).json({ exist: true, user: userData, token: token });
