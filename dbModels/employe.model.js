@@ -9,8 +9,8 @@ const EmployeeSchema = new Schema({
     otpExpires: { type: Date },
     phone_number: { type: Number },
     address: { type: String },
-    business_name: { type: String }
-
+    business_name: { type: String },
+    devices: { type: Schema.Types.Mixed },
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);

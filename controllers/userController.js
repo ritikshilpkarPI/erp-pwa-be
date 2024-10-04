@@ -39,7 +39,7 @@ const signup = async (req, res) => {
 
 // Login
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, deviceID } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -51,15 +51,26 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
+    let deviceName = user?.devices?.deviceID;
+
+    if(!deviceName){
+        user.devices = user.devices || {};
+        const deviceCount = Object.keys(user.devices).length + 1;
+        deviceName = `POS-${deviceCount}`;
+        user.devices[deviceID] = deviceName;
+        await user.save();
+    }
+
     const userData = {
       _id: user._id,
       name: user.name,
       email: user.email,
+      deviceName
     };
 
     const token = generateToken(userData, '24h');
 
-    return res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
 
     return res.status(200).json({ token });
   } catch (error) {
