@@ -5,6 +5,9 @@ const itemModel = require('../dbModels/item.model');
 
 const getSaleById = async (id) => {
     try {
+        if (!id){
+            throw new Error("Sale not found")
+        }
         const sale = await Sale.findById(id);
         if (sale) {
             return sale;
