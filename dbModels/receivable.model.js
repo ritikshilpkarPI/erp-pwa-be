@@ -6,6 +6,7 @@ const ReceivableSchema = new Schema({
     amount_owed: { type: Number },
     due_date: { type: Date },
     status: { type: String, enum: ['Open', 'Closed'] },
+    userId: { type: Schema.Types.ObjectId, ref: 'Employee' }
 });
 
 module.exports = mongoose.model('Receivable', ReceivableSchema);

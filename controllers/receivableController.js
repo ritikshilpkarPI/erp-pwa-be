@@ -2,9 +2,10 @@ const Receivable = require('../dbModels/receivable.model');
 
 // Create a new receivable
 const createReceivable = async (req, res) => {
+    const { _id: userId } = req.decodedUser;
     const { customer_id, amount_owed, due_date, status } = req.body;
     try {
-        const newReceivable = new Receivable({ customer_id, amount_owed, due_date, status });
+        const newReceivable = new Receivable({ customer_id, amount_owed, due_date, status, userId });
         await newReceivable.save();
         return res.status(201).json(newReceivable);
     } catch (error) {
@@ -30,7 +31,8 @@ const getReceivableById = async (req, res) => {
 // Get all receivables
 const getAllReceivables = async (req, res) => {
     try {
-        const receivables = await Receivable.find();
+        const { _id: userId } = req.decodedUser;
+        const receivables = await Receivable.find({ userId });
         return res.json(receivables);
     } catch (error) {
         return res.status(500).json({ message: error.message });

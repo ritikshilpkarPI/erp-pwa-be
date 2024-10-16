@@ -1,4 +1,5 @@
-const router = require("express").Router()
+const router = require("express").Router();
+const unAuthorizedRouter = require("express").Router();
 const customerController = require('./customerController');
 const categoryController = require('./categoryController');
 const itemController = require('./itemController');
@@ -72,13 +73,13 @@ router.post('/payments', paymentController.createPayment);
 router.put('/payments/:id', paymentController.updatePaymentById);
 router.delete('/payments/:id', paymentController.deletePaymentById);
 
-router.post('/signup', userController.signup);
-router.post('/signin', userController.login);
-router.post('/generate-otp', userController.generateAndSendOTP);
-router.post('/verify-otp', userController.verifyOTP);
-router.post('/change-password', userController.changePassword);
-router.post('/resend-otp', userController.generateAndSendOTP);
-router.post('/signin-number',userController.getUserByPhoneNumber)
+unAuthorizedRouter.post('/signup', userController.signup);
+unAuthorizedRouter.post('/signin', userController.login);
+unAuthorizedRouter.post('/generate-otp', userController.generateAndSendOTP);
+unAuthorizedRouter.post('/verify-otp', userController.verifyOTP);
+unAuthorizedRouter.post('/change-password', userController.changePassword);
+unAuthorizedRouter.post('/resend-otp', userController.generateAndSendOTP);
+unAuthorizedRouter.post('/signin-number',userController.getUserByPhoneNumber)
 
 
 router.post('/download-invoice', downloadInvoice);
@@ -95,4 +96,7 @@ router.post('/share-invoice',shareInvoice)
 router.post('/send-otp', sendOtp)
 
 
-module.exports = router
+module.exports = {
+    router,
+    unAuthorizedRouter
+}

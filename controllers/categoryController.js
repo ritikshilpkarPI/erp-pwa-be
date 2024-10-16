@@ -9,10 +9,12 @@ const {uploadImageToCloudinary} = require('../util/cloudinaryUtils')
 const createCategory = async (req, res) => {
     const { category_image } = req.files;
     const { category_name, category_color } = req.body;
+    const { _id: userId } = req.decodedUser;
     try {
         const result = await uploadImageToCloudinary(category_image);      
         // Create a new category object
         const newCategory = new Category({
+            userId,
             category_name,
             category_color,
             category_image: result.secure_url
@@ -47,7 +49,8 @@ const getCategoryById = async (req, res) => {
 // Get all categories
 const getAllCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const { _id: userId } = req.decodedUser;
+        const categories = await Category.find({userId});
         return res.json(categories);
     } catch (error) {
         return res.status(500).json({ message: error.message });

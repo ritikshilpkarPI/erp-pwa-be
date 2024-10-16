@@ -6,9 +6,10 @@ const Item = require('../dbModels/item.model');
 const createItem = async (req, res) => {
     const { img_url } = req.files;
     const { name, prize, category_id, sold_by, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode } = req.body;
+    const { _id: userId } = req.decodedUser;
     try {
         const result = await uploadImageToCloudinary(img_url);
-        const newItem = new Item({ name, prize, category_id, sold_by, img_url: result.secure_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
+        const newItem = new Item({ userId, name, prize, category_id, sold_by, img_url: result.secure_url, category, price_per_unit, price_per_dozen, price_per_carton, sku, barcode });
         await newItem.save();
         return res.status(201).json(newItem);
     } catch (error) {
@@ -35,7 +36,8 @@ const getItemById = async (req, res) => {
 const getAllItems = async (req, res) => {
     try {
         const { category_id, name } = req.query;
-        const query = {};
+        const { _id: userId } = req.decodedUser;
+        const query = { userId };
 
         if (category_id) {
             query.category_id = category_id;

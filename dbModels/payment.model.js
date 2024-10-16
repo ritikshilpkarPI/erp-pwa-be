@@ -9,6 +9,7 @@ const PaymentSchema = new Schema({
     cheque_amount: { type: Number },
     cheque_date: { type: Date },
     sale_id: { type: Schema.Types.ObjectId, ref: 'Sale' },
+    userId: { type: Schema.Types.ObjectId, ref: 'Employee' }
 });
 
 module.exports = mongoose.model('Payment', PaymentSchema);

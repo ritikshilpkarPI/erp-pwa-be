@@ -12,7 +12,8 @@ const ItemSchema = new Schema({
     price_per_dozen: { type: Number },
     price_per_carton: { type: Number },
     sku: { type: Number },
-    barcode: { type: String }
+    barcode: { type: String },
+    userId: { type: Schema.Types.ObjectId, ref: 'Employee' }
 });
 
 module.exports = mongoose.model('Item', ItemSchema);
