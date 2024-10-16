@@ -91,7 +91,7 @@ router.post('/whatsApp-invoice', whatsAppInvoice);
 
 router.post('/transaction-history', transationHistory);
 
-router.post('/share-invoice',shareInvoice)
+unAuthorizedRouter.post('/share-invoice',shareInvoice)
 
 router.post('/send-otp', sendOtp)
 
