@@ -18,7 +18,8 @@ const getPaymentById = async (req, res) => {
 // Get all payments
 const getAllPayments = async (req, res) => {
     try {
-        const payments = await Payment.find();
+    const { _id: userId } = req.decodedUser;
+    const payments = await Payment.find({ userId });
         return res.json(payments);
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -27,9 +28,10 @@ const getAllPayments = async (req, res) => {
 
 // Create a new payment
 const createPayment = async (req, res) => {
+    const { _id: userId } = req.decodedUser;
     const { payment_date, payment_type, cheque_name, cheque_number, cheque_amount, cheque_date, sale_id } = req.body;
     try {
-        const newPayment = new Payment({ payment_date, payment_type, cheque_name, cheque_number, cheque_amount, cheque_date, sale_id });
+        const newPayment = new Payment({ userId, payment_date, payment_type, cheque_name, cheque_number, cheque_amount, cheque_date, sale_id });
         await newPayment.save();
         return res.status(201).json(newPayment);
     } catch (error) {

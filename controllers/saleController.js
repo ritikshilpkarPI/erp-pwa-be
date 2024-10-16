@@ -24,7 +24,8 @@ const getSaleById = async (req, res) => {
 // Get all sales
 const getAllSales = async (req, res) => {
     try {
-        const sales = await Sale.find().populate('customer_id','_id name');
+        const { _id: userId } = req.decodedUser;
+        const sales = await Sale.find({ userId }).populate('customer_id','_id name');
         return res.json(sales);
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -149,6 +150,7 @@ const generatePDF = async (
 // Create a new sale
 const createSale = async (req, res) => {
     const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount,cheques } = req.body;
+    const { _id: userId } = req.decodedUser;
 
     // Ensure items is defined and is an array
     if (!Array.isArray(items)) {
@@ -194,7 +196,8 @@ const createSale = async (req, res) => {
             payment_id, 
             cheques,
             totalAmount: parseFloat(totalAmount), 
-            download_link:uploadResult.secure_url
+            download_link:uploadResult.secure_url,
+            userId
         });
         await newSale.save();
         return res.status(201).json(newSale);

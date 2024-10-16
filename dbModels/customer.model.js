@@ -9,7 +9,7 @@ const CustomerSchema = new Schema({
     credit_limit: { type: Number },
     telephone: { type: String },
     is_deleted: { type: Boolean, default: false },
-
+    userId: { type: Schema.Types.ObjectId, ref: 'Employee' }
 });
 
 module.exports = mongoose.model('Customer', CustomerSchema);
