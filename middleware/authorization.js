@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const setUserInReqFromCookie = (req, res, next) => {
   
   try {
-    console.log(`Incoming Headers: ${req.headers}`);
+    console.log(`Incoming Headers: ${JSON.stringify(req.headers)}`);
     const cookies = req.headers?.cookie?.split('; ');
     console.log(`cookies: ${cookies}`);
     if(!cookies) return res.status(401).send('UNAUTHORIZED');
