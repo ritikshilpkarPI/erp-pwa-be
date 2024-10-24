@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const setUserInReqFromCookie = (req, res, next) => {
+  
   try {
+    console.log(`Incoming Headers: ${req.headers}`);
     const cookies = req.headers?.cookie?.split('; ');
     console.log(`cookies: ${cookies}`);
     if(!cookies) return res.status(401).send('UNAUTHORIZED');
@@ -12,7 +14,7 @@ const setUserInReqFromCookie = (req, res, next) => {
           const decoded = jwt.verify(token, process.env.JWT_SECRET || 'JWT_SECRET');
           if(!decoded) return res.status(401).send('UNAUTHORIZED');
           console.log(decoded);
-                                                  
+
           req.decodedUser = decoded.user;
           next();
           return;
