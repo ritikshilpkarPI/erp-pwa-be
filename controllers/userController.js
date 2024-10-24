@@ -74,7 +74,14 @@ const login = async (req, res) => {
 
     const token = generateToken(userData, '24h');
 
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
+    // res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
+    res.cookie('token', token, {
+      httpOnly: true, // Prevents JavaScript access on the client side
+      secure: true, // Ensures the cookie is only sent over HTTPS
+      sameSite: 'None', // Allows cross-origin requests
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+  });
+  
 
     return res.status(200).json({ token });
   } catch (error) {
