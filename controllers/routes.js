@@ -93,7 +93,7 @@ router.post('/transaction-history', transationHistory);
 
 unAuthorizedRouter.post('/share-invoice',shareInvoice)
 
-router.post('/send-otp', sendOtp)
+unAuthorizedRouter.post('/send-otp', sendOtp)
 
 
 module.exports = {
