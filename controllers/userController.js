@@ -29,7 +29,7 @@ const signup = async (req, res) => {
       address: newUser.address,
     };
 
-    const token = generateToken(userData, '24h');
+    const token = generateToken(userData);
 
     return res.status(201).json({ token });
   } catch (error) {

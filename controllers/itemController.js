@@ -25,7 +25,7 @@ const getItemById = async (req, res) => {
         if (item) {
             return res.json(item);
         } else {
-            return res.status(404).json({ message: 'Item not found' });
+            return res.status(200).json({ message: 'Item not found' });
         }
     } catch (error) {
         return res.status(400).json({ message: error.message });
