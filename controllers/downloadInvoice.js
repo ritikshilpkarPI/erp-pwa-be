@@ -39,7 +39,7 @@ const getEmployeeById = async (id) => {
     }
 };
 
-const getItemById = async (items) => {
+const getItemById = async (items = []) => {
     let totalQuantity = 0;
     try {
         const itemPromises = items.map(async (item) => {
@@ -77,7 +77,7 @@ exports.downloadInvoice = async (req, res, next) => {
         } = req.body;
 
         const transactionid = await getSaleById(_id);
-        const customer = await getCustomerById(customer_id);
+        const customer = await getCustomerById(customer_id) ?? {};
         const employee = await getEmployeeById(employee_id);
         const { resolvedItems, totalQuantity } = await getItemById(items);
         const dateOfSale = new Date(date_of_sale);
@@ -92,8 +92,8 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`${employee.business_name}, ${employee.address}`, 70, 25);
         doc.text(`${employee.name}`, 70, 30);
         doc.text('BILL INVOICE', 80, 35);
-        doc.text(`CUSTOMER NAME: ${customer.name}`, 10, 45);
-        doc.text(`MOBILE NUMBER: ${customer.telephone}`, 10, 50);
+        doc.text(`CUSTOMER NAME: ${customer.name ?? "N/A"}`, 10, 45);
+        doc.text(`MOBILE NUMBER: ${customer.telephone ?? "N/A"}`, 10, 50);
         doc.text(`DELIVERY MODE: ${totalAmount}`, 10, 55);
         doc.text(`DELIVERY ADDRESS: ${totalAmount}`, 10, 60);
         doc.text(`PAYMENT MODE: ${totalAmount}`, 130, 45);
@@ -129,8 +129,8 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
 
         // Set the response headers
-        return res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
-        return res.setHeader('Content-type', 'application/pdf');
+        res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
+        res.setHeader('Content-type', 'application/pdf');
 
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
