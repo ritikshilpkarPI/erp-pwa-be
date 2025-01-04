@@ -62,7 +62,7 @@ exports.emailInvoice = async (req, res) => {
         } = req.body;
         const { email } = req.query;
 
-        const customer = await getCustomerById(customer_id);
+        const customer = await getCustomerById(customer_id) ?? {};
         const employee = await getEmployeeById(employee_id);
         const { resolvedItems, totalQuantity } = await getItemById(items);
         const dateOfSale = new Date(date_of_sale);
@@ -77,8 +77,8 @@ exports.emailInvoice = async (req, res) => {
         doc.text(`${employee.business_name}, ${employee.address}`, 70, 25);
         doc.text(`${employee.name}`, 70, 30);
         doc.text('BILL INVOICE', 80, 35);
-        doc.text(`CUSTOMER NAME: ${customer.name}`, 10, 45);
-        doc.text(`MOBILE NUMBER: ${customer.telephone}`, 10, 50);
+        doc.text(`CUSTOMER NAME: ${customer.name ?? "N/A"}`, 10, 45);
+        doc.text(`MOBILE NUMBER: ${customer.telephone  ?? "N/A"}`, 10, 50);
         doc.text(`DELIVERY MODE: ${totalAmount}`, 10, 55);
         doc.text(`DELIVERY ADDRESS: ${totalAmount}`, 10, 60);
         doc.text(`PAYMENT MODE: ${totalAmount}`, 130, 45);
@@ -108,7 +108,7 @@ exports.emailInvoice = async (req, res) => {
         doc.text('SUB TOTAL:', 140, startY + 10);
         doc.text(`${totalAmount}`, 170, startY + 10);
 
-        doc.text(`TXN NUMBER: ${_id}`, 10, startY + 20);
+        doc.text(`TXN NUMBER: ${_id ?? "N/A"}`, 10, startY + 20);
         doc.text(`ORDER TIME: ${timePart}`, 10, startY + 30);
         doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
 

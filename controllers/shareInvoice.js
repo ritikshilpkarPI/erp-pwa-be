@@ -81,12 +81,10 @@ const  shareInvoice = async (req, res) => {
 
     try {
         const sale = await getSaleById(id);
-        const { items, totalAmount, customer_id, employee_id, date_of_sale } = sale;
-
-        const customer = await getCustomerById(customer_id);
-        const employee = await getEmployeeById(employee_id);
+        const { items, totalAmount, customer_id, employee_id, date_of_sale, TXN_id } = sale;
+        const customer = await customerModel.findById(customer_id) ?? {};
+        const employee = await getEmployeeById(employee_id) ?? {};
         const { resolvedItems, totalQuantity } = await getItemById(items);
-        console.log(`data :${resolvedItems}`);
         
 
         const dateOfSale = new Date(date_of_sale);
@@ -97,9 +95,9 @@ const  shareInvoice = async (req, res) => {
             totalQuantity,
             totalAmount,
             date_of_sale,
+            TXN_id,
         }
 
-        console.log(saleData);
         
         return res.json(saleData)
 
