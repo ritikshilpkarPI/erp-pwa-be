@@ -88,16 +88,16 @@ exports.downloadInvoice = async (req, res, next) => {
 
         // Add content to PDF
         doc.setFontSize(10);
-        doc.text(`${employee.business_name}`, 70, 20);
-        doc.text(`${employee.business_name}, ${employee.address}`, 70, 25);
-        doc.text(`${employee.name}`, 70, 30);
+        doc.text(`${employee?.business_name}`, 70, 20);
+        doc.text(`${employee?.business_name}, ${employee?.address}`, 70, 25);
+        doc.text(`${employee?.name}`, 70, 30);
         doc.text('BILL INVOICE', 80, 35);
-        doc.text(`CUSTOMER NAME: ${customer.name}`, 10, 45);
-        doc.text(`MOBILE NUMBER: ${customer.telephone}`, 10, 50);
+        doc.text(`CUSTOMER NAME: ${customer?.name}`, 10, 45);
+        doc.text(`MOBILE NUMBER: ${customer?.telephone}`, 10, 50);
         doc.text(`DELIVERY MODE: ${totalAmount}`, 10, 55);
         doc.text(`DELIVERY ADDRESS: ${totalAmount}`, 10, 60);
         doc.text(`PAYMENT MODE: ${totalAmount}`, 130, 45);
-        doc.text(`TOTAL ITEMS: ${resolvedItems.length}`, 130, 50);
+        doc.text(`TOTAL ITEMS: ${resolvedItems?.length}`, 130, 50);
         doc.text(`TOTAL QUANTITY: ${totalQuantity}`, 130, 55);
 
         // Table header
@@ -112,12 +112,13 @@ exports.downloadInvoice = async (req, res, next) => {
         let startY = 85;
 
         resolvedItems.forEach((item, index) => {
+            
             doc.text(`${index + 1}`, 10, startY);
-            doc.text(`${item._name}`, 30, startY);
-            doc.text(`${item._category}`, 65, startY);  // Ensure this field exists in your item model
-            doc.text(`${item._prize}`, 100, startY);
-            doc.text(`${item._count}`, 140, startY);
-            doc.text(`${item._prize * item._count}`, 170, startY);
+            doc.text(`${item?._name}`, 30, startY);
+            doc.text(`${item?._category}`, 65, startY);  // Ensure this field exists in your item model
+            doc.text(`${item?._prize}`, 100, startY);
+            doc.text(`${item?._count}`, 140, startY);
+            doc.text(`${item?._prize * item._count}`, 170, startY);
             startY += 10;
         });
 
@@ -129,8 +130,8 @@ exports.downloadInvoice = async (req, res, next) => {
         doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
 
         // Set the response headers
-        return res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
-        return res.setHeader('Content-type', 'application/pdf');
+         res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
+         res.setHeader('Content-type', 'application/pdf');
 
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
