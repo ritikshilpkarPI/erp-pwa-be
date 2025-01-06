@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema({
   _id: { type: Schema.Types.ObjectId, ref: 'Item' },
-  _count: { type: Number, default: 1 }
+  _count: { type: Number, default: 1 },
+  quantityType: { type: String },
+  price: { type: Number },
 });
 const chequeList = new Schema({
   bank_name:{type:String},

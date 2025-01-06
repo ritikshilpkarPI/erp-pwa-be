@@ -160,7 +160,9 @@ const createSale = async (req, res) => {
     // Format items to ensure each item has _id and _count properties
     const formattedItems = items.map(item => ({
         _id: item._id,
-        _count: item._count
+        _count: item._count,
+        quantityType: item.quantityType,
+        price: item.price
     }));
 
     const TXN_id = uuidv4();
