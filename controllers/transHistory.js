@@ -29,8 +29,9 @@ const getItemById = async (items) => {
             totalQuantity += item._count;
             return {
                 _name: foundItem.name,
-                _prize: foundItem.prize,
+                _prize: foundItem[item.quantityType] ?? foundItem.prize,
                 _count: item._count,
+                quantityType: item.quantityType
             };
         });
 
@@ -41,7 +42,7 @@ const getItemById = async (items) => {
             item._totalQuantity = totalQuantity;
         });
 
-        return resolvedItems;
+        return { items: resolvedItems, totalQuantity };
     } catch (error) {
         console.log(error);
         return "something went wrong"
@@ -77,11 +78,12 @@ exports.transationHistory = async (req, res, next) => {
     const itemss = transaction['items'];
     const employeData = await getEmployeeById(transaction['employee_id']);
     const customer = await getCustomerById(transaction['customer_id']);
-    const formatedItem = await getItemById(itemss);
+    const { items, totalQuantity } = await getItemById(itemss);
     return res.json({
         transaction: transaction,
         customer: customer,
-        items: formatedItem,
-        employeData: employeData
+        items,
+        employeData: employeData,
+        totalQuantity
     })
 }
