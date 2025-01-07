@@ -22,7 +22,8 @@ const SaleSchema = new Schema({
   totalAmount: { type: Number, default: 0 },
   cheques:[chequeList],
   download_link:{type:String},
-  userId: { type: Schema.Types.ObjectId, ref: 'Employee' }
+  userId: { type: Schema.Types.ObjectId, ref: 'Employee' },
+  remainingAmount: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('Sale', SaleSchema);
