@@ -5,6 +5,7 @@ const Sale = require('../dbModels/sale.model');
 const { uploadPdfToCloudinary } = require('../util/cloudinaryUtils');
 const { v4: uuidv4 } = require('uuid');
 const { jsPDF } = require('jspdf');
+const { calculatePaidAmount } = require('../util/calculatePaidAmount');
 
 // Get sale by ID
 const getSaleById = async (req, res) => {
@@ -149,13 +150,14 @@ const generatePDF = async (
 
 // Create a new sale
 const createSale = async (req, res) => {
-    const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount,cheques } = req.body;
+    const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount,cheques, cashAmount = 0 } = req.body;
     const { _id: userId } = req.decodedUser;
 
     // Ensure items is defined and is an array
     if (!Array.isArray(items)) {
         return res.status(400).json({ message: 'items must be an array' });
     }
+    const paidAmount= calculatePaidAmount({cashAmount,cheques});
 
     // Format items to ensure each item has _id and _count properties
     const formattedItems = items.map(item => ({
@@ -182,7 +184,6 @@ const createSale = async (req, res) => {
         return res.status(400).json({ error: 'Failed to generate pdf' });
     }
     const uploadResult = await uploadPdfToCloudinary(pdfBuffer);
-        console.log({ ...uploadResult });
         if (!uploadResult) {
             return res.status(400).json({ error: 'Failed to generate link' });
         }
@@ -199,7 +200,8 @@ const createSale = async (req, res) => {
             cheques,
             totalAmount: parseFloat(totalAmount), 
             download_link:uploadResult.secure_url,
-            userId
+            userId,
+            remainingAmount: Number(totalAmount) - Number(paidAmount)
         });
         await newSale.save();
         return res.status(201).json(newSale);
