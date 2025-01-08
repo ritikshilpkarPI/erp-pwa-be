@@ -187,7 +187,7 @@ const createSale = async (req, res) => {
         if (!uploadResult) {
             return res.status(400).json({ error: 'Failed to generate link' });
         }
-        
+
 
     try {
         const newSale = new Sale({ 
@@ -216,11 +216,18 @@ const createSale = async (req, res) => {
 // Update sale by ID
 const updateSaleById = async (req, res) => {
     const { id } = req.params;
-    const { customer_id, item_id, employee_id, date_of_sale, payment_id } = req.body;
+    const { totalAmount, remainingAmount, cheques, cashAmount = 0 } = req.body;
+    const paidAmount = calculatePaidAmount({ cashAmount, cheques });
     try {
         const sale = await Sale.findByIdAndUpdate(
             id,
-            { customer_id, item_id, employee_id, date_of_sale, payment_id },
+            {
+              $set: {
+                remainingAmount:
+                  Number(remainingAmount) - Number(paidAmount),
+              },
+              $push: { cheques: { $each: cheques } }, 
+            },
             { new: true }
         );
         if (sale) {
