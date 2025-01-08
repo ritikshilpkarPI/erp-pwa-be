@@ -210,6 +210,7 @@ const createSale = async (req, res) => {
         return res.status(201).json(newSale);
 
     } catch (error) {
+        console.log(error);  
         return res.status(500).json({ message: error.message });
     }
 };
@@ -244,6 +245,7 @@ const updateSaleById = async (req, res) => {
             return res.status(404).json({ message: 'Sale not found' });
         }
     } catch (error) {
+        console.log(error);  
         return res.status(500).json({ message: error.message });
     }
 };
