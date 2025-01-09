@@ -15,10 +15,8 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-
-
 app.use(cors({
-    origin: ["https://erp-pwa.netlify.app", "http://localhost:3000", "https://main--erp-pwa.netlify.app", "http://192.168.29.198:3000"],
+    origin: ["https://erp-pwa.netlify.app", "http://localhost:3000", "https://main--erp-pwa.netlify.app", "http://192.168.29.198:3000","https://erp-pwa-pi.netlify.app"],
     credentials: true
 }))
 // Middleware to parse JSON
@@ -35,7 +33,7 @@ app.get('/', (req, res) => res.json('hello wolrd'));
 app.use("/api/v1", unAuthorizedRouter);
 app.use("/api/v1",setUserInReqFromCookie, router);
 
-// // Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+module.exports = {
+    app
+}

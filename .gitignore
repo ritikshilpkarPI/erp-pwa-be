@@ -9,6 +9,8 @@ node_modules
 # production
 /build
 
+/dist
+netlify/functions/src
 # misc
 .DS_Store
 .env
