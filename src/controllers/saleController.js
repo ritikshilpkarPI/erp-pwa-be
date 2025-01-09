@@ -150,6 +150,8 @@ const generatePDF = async (
 
 // Create a new sale
 const createSale = async (req, res) => {
+    console.log(req.body);
+    console.log(req.decodedUser);  
     const { customer_id, items, employee_id, date_of_sale, payment_id, totalAmount,cheques, cashAmount = 0 } = req.body;
     const { _id: userId } = req.decodedUser;
 
@@ -204,9 +206,11 @@ const createSale = async (req, res) => {
             remainingAmount: Number(totalAmount) - Number(paidAmount)
         });
         await newSale.save();
+        console.log(newSale);        
         return res.status(201).json(newSale);
 
     } catch (error) {
+        console.log(error);  
         return res.status(500).json({ message: error.message });
     }
 };
@@ -216,8 +220,12 @@ const createSale = async (req, res) => {
 // Update sale by ID
 const updateSaleById = async (req, res) => {
     const { id } = req.params;
+    console.log(req.params);
+    console.log( req.body);    
     const { totalAmount, remainingAmount, cheques, cashAmount = 0 } = req.body;
     const paidAmount = calculatePaidAmount({ cashAmount, cheques });
+    console.log(paidAmount);
+    
     try {
         const sale = await Sale.findByIdAndUpdate(
             id,
@@ -231,11 +239,13 @@ const updateSaleById = async (req, res) => {
             { new: true }
         );
         if (sale) {
+            console.log(sale);            
             return res.json(sale);
         } else {
             return res.status(404).json({ message: 'Sale not found' });
         }
     } catch (error) {
+        console.log(error);  
         return res.status(500).json({ message: error.message });
     }
 };
