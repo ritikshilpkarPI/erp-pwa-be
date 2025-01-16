@@ -60,11 +60,24 @@ const getItemById = async (items) => {
                 throw new Error('Item not found');
             }
             totalQuantity += item._count;
+
+            let itemPrice;
+            switch (item.quantityType) {
+                case "price_per_unit":
+                    itemPrice = foundItem.price_per_unit;
+                    break;
+                case "price_per_dozen":
+                    itemPrice = foundItem.price_per_dozen;
+                    break;
+                case "price_per_carton":
+                    itemPrice = foundItem.price_per_carton;
+                    break;
+            }
             return {
                 _name: foundItem.name,
-                _prize: foundItem.prize,
+                _prize: itemPrice,
                 _count: item._count,
-                _category: foundItem.category,
+                quantityType: item.quantityType
             };
         });
 
@@ -83,19 +96,16 @@ const  shareInvoice = async (req, res) => {
         const sale = await getSaleById(id);
         const { items, totalAmount, customer_id, employee_id, date_of_sale, TXN_id } = sale;
         const customer = await customerModel.findById(customer_id) ?? {};
-        const employee = await getEmployeeById(employee_id) ?? {};
+        const employeData = await getEmployeeById(employee_id) ?? {};
         const { resolvedItems, totalQuantity } = await getItemById(items);
         
 
         const dateOfSale = new Date(date_of_sale);
         const saleData = {
             customer,
-            employee,
-            resolvedItems,
-            totalQuantity,
-            totalAmount,
-            date_of_sale,
-            TXN_id,
+            employeData,
+            items: resolvedItems,
+            transaction:{totalAmount,date_of_sale,TXN_id},
         }
 
         
