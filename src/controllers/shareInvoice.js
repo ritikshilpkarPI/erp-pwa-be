@@ -77,7 +77,8 @@ const getItemById = async (items) => {
                 _name: foundItem.name,
                 _prize: itemPrice,
                 _count: item._count,
-                quantityType: item.quantityType
+                quantityType: item.quantityType,
+                _category: foundItem.category,
             };
         });
 
@@ -106,6 +107,7 @@ const  shareInvoice = async (req, res) => {
             employeData,
             items: resolvedItems,
             transaction:{totalAmount,date_of_sale,TXN_id},
+            totalQuantity
         }
 
         
