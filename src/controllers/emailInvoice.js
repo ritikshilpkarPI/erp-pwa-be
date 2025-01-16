@@ -33,11 +33,25 @@ const getItemById = async (items) => {
                 throw new Error('Item not found');
             }
             totalQuantity += item._count;
+
+            let itemPrice;
+            switch (item.quantityType) {
+                case "price_per_unit":
+                    itemPrice = foundItem.price_per_unit;
+                    break;
+                case "price_per_dozen":
+                    itemPrice = foundItem.price_per_dozen;
+                    break;
+                case "price_per_carton":
+                    itemPrice = foundItem.price_per_carton;
+                    break;
+            }
             return {
                 _name: foundItem.name,
-                _prize: foundItem.prize,
+                _prize: itemPrice,
                 _count: item._count,
-                _category: foundItem.category,  // Ensure this field exists in your item model
+                quantityType: item.quantityType,
+                _category: foundItem.category,
             };
         });
 
@@ -69,48 +83,56 @@ exports.emailInvoice = async (req, res) => {
         const datePart = dateOfSale.toISOString().slice(0, 10);
         const timePart = dateOfSale.toISOString().slice(11, 19);
 
+        const quantityTypeConstant = {
+            "price_per_unit": "Unit",
+            "price_per_dozen": "Dozen",
+            "price_per_carton": "Carton",
+        };
+
         const doc = new jsPDF();
+        const paymentMode= payment_id === '60d5f9e9a60b2f1b4c3c1c84'? "Cash": "Cheque"
 
         // Add content to PDF
         doc.setFontSize(10);
-        doc.text(`${employee.business_name}`, 70, 20);
-        doc.text(`${employee.business_name}, ${employee.address}`, 70, 25);
-        doc.text(`${employee.name}`, 70, 30);
-        doc.text('BILL INVOICE', 80, 35);
-        doc.text(`CUSTOMER NAME: ${customer.name ?? "N/A"}`, 10, 45);
-        doc.text(`MOBILE NUMBER: ${customer.telephone  ?? "N/A"}`, 10, 50);
-        doc.text(`DELIVERY MODE: ${totalAmount}`, 10, 55);
-        doc.text(`DELIVERY ADDRESS: ${totalAmount}`, 10, 60);
-        doc.text(`PAYMENT MODE: ${totalAmount}`, 130, 45);
-        doc.text(`TOTAL ITEMS: ${resolvedItems.length}`, 130, 50);
-        doc.text(`TOTAL QUANTITY: ${totalQuantity}`, 130, 55);
+        doc.text('BILL INVOICE', 80, 20);
+
+        doc.text(`BUSINESS NAME: ${employee.business_name}`, 10, 35);
+        doc.text(`ADDRESS: ${employee.business_name}, ${employee.address}`, 10, 40);
+
+        doc.text(`EMPLOYEE NAME: ${employee.name ?? "N/A"}`, 10, 50);
+        doc.text(`CUSTOMER NAME: ${customer.name ?? "N/A"}`, 10, 55);
+        doc.text(`MOBILE NUMBER: ${customer.telephone  ?? "N/A"}`, 10, 60);
+       
+        doc.text(`PAYMENT MODE: ${paymentMode}`, 130, 50);
+        doc.text(`TOTAL ITEMS: ${resolvedItems.length}`, 130, 55);
+        doc.text(`TOTAL QUANTITY: ${totalQuantity}`, 130, 60);
 
         // Table header
         doc.setFontSize(10);
-        doc.text('SR NO.', 10, 77);
-        doc.text('NAME', 30, 77);
-        doc.text('RATE (Rs.)', 100, 77);
-        doc.text('CATEGORY', 65, 77);
-        doc.text('QTY', 140, 77);
-        doc.text('VALUE (Rs.)', 170, 77);
+        doc.text('SR NO.', 10, 70);
+        doc.text('NAME', 30, 70);
+        doc.text('RATE (Rs.)', 100, 70);
+        doc.text('CATEGORY', 65, 70);
+        doc.text('QTY', 140, 70);
+        doc.text('VALUE (Rs.)', 170, 70);
 
-        let startY = 85;
+        let startY = 80;
 
         resolvedItems.forEach((item, index) => {
             doc.text(`${index + 1}`, 10, startY);
             doc.text(`${item._name}`, 30, startY);
             doc.text(`${item._category}`, 65, startY);  // Ensure this field exists in your item model
             doc.text(`${item._prize}`, 100, startY);
-            doc.text(`${item._count}`, 140, startY);
+            doc.text(`${item._count} ${quantityTypeConstant[item.quantityType]}`, 140, startY);
             doc.text(`${item._prize * item._count}`, 170, startY);
             startY += 10;
         });
-        doc.text('SUB TOTAL:', 140, startY + 10);
-        doc.text(`${totalAmount}`, 170, startY + 10);
+        doc.text('SUB TOTAL:', 140, startY );
+        doc.text(`${totalAmount}`, 170, startY );
 
-        doc.text(`TXN NUMBER: ${_id ?? "N/A"}`, 10, startY + 20);
-        doc.text(`ORDER TIME: ${timePart}`, 10, startY + 30);
-        doc.text(`ORDER DATE: ${datePart}`, 10, startY + 40);
+        // doc.text(`TXN NUMBER: ${_id ?? "N/A"}`, 10, startY + 20);
+        doc.text(`ORDER TIME: ${timePart}`, 10, startY );
+        doc.text(`ORDER DATE: ${datePart}`, 10, startY + 5);
 
         // Send the PDF buffer as the response
         const pdfBuffer = doc.output('arraybuffer');
